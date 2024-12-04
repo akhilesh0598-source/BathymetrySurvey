@@ -1,19 +1,17 @@
 #ifndef GPS_HPP
 #define GPS_HPP
 
-#include<iostream>
+#include <iostream>
+#include "SerialDevice.hpp"
 
-class GPS
+class GPS : public SerialDevice
 {
-    private:
-    std::string portName;
-    uint baudrate;
-    
-    
-    public:
-    GPS(std::string portName,uint baudrate);
-    void OpenDevice()
-};
+private:
+    std::string device_name;
 
+public:
+    GPS(std::string port_name, uint baudrate);
+    
+};
 
 #endif
