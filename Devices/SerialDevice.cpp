@@ -48,3 +48,9 @@ void SerialDevice::ReadHandler(const boost::system::error_code &error, std::size
         std::cerr << "File Name: " __FILE__ << " Method Name: " << __func__ << "Error: " << this->device_port << " is failed in reading.";
     }
 }
+
+void SerialDevice::OnDataReceived(const std::string& received_data)
+{
+    std::cout << this->device_port <<" Data " << received_data<<std::endl;
+
+}
