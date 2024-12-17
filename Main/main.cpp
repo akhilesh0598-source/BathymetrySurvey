@@ -10,12 +10,15 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <chrono>
+
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+using namespace std::chrono_literals;
 
 void fail(beast::error_code ec, char const *what)
 {
@@ -36,22 +39,12 @@ public:
     }
 
     // Get on the correct executor
-    void
-    run()
+    void run()
     {
-        // We need to be executing within a strand to perform async operations
-        // on the I/O objects in this session. Although not strictly necessary
-        // for single-threaded contexts, this example code is written to be
-        // thread-safe by default.
-        net::dispatch(ws_.get_executor(),
-                      beast::bind_front_handler(
-                          &session::on_run,
-                          shared_from_this()));
+        net::dispatch(ws_.get_executor(), beast::bind_front_handler(&session::on_run, shared_from_this()));
     }
 
-    // Start the asynchronous operation
-    void
-    on_run()
+    void on_run()
     {
         // Set suggested timeout settings for the websocket
         ws_.set_option(
@@ -65,7 +58,8 @@ public:
                 res.set(http::field::server,
                         std::string(BOOST_BEAST_VERSION_STRING) +
                             " websocket-server-async");
-                res.set("Access-Control-Allow-Origin","*");
+                res.set("Access-Control-Allow-Origin", "*"); // Allow all origins
+                res.set("Access-Control-Allow-Credentials", "true");
             }));
         // Accept the websocket handshake
         ws_.async_accept(
@@ -74,31 +68,33 @@ public:
                 shared_from_this()));
     }
 
-    void
-    on_accept(beast::error_code ec)
+    void on_accept(beast::error_code ec)
     {
         if (ec)
             return fail(ec, "accept");
 
         // Read a message
-        do_read();
+        // do_read();
+        // ws_.async_read(buffer_, beast::bind_front_handler(&session::on_read, shared_from_this()));
+
+        std::string res = "New Data";
+
+        auto prepared_buffer = buffer_.prepare(res.length());
+        boost::asio::buffer_copy(prepared_buffer.data(), boost::asio::buffer(res, res.size()));
+        buffer_.commit(res.size());
+
+        ws_.async_write(buffer_.data(), beast::bind_front_handler(&session::on_write, shared_from_this()));
+        std::chrono::milliseconds duration{50};
+        std::this_thread::sleep_for(duration);
     }
 
-    void
-    do_read()
+    void do_read()
     {
         // Read a message into our buffer
-        ws_.async_read(
-            buffer_,
-            beast::bind_front_handler(
-                &session::on_read,
-                shared_from_this()));
+        ws_.async_read(buffer_, beast::bind_front_handler(&session::on_read, shared_from_this()));
     }
 
-    void
-    on_read(
-        beast::error_code ec,
-        std::size_t bytes_transferred)
+    void on_read(beast::error_code ec, std::size_t bytes_transferred)
     {
         boost::ignore_unused(bytes_transferred);
 
@@ -111,17 +107,29 @@ public:
 
         // Echo the message
         ws_.text(ws_.got_text());
-        ws_.async_write(
-            buffer_.data(),
-            beast::bind_front_handler(
-                &session::on_write,
-                shared_from_this()));
+
+        while (true)
+        {
+            try
+            {
+                std::string res = "New Data";
+
+                // auto prepared_buffer = buffer_.prepare(res.length());
+                // boost::asio::buffer_copy(prepared_buffer.data(), boost::asio::buffer(res, res.size()));
+                // buffer_.commit(res.size());
+
+                ws_.async_write(buffer_.data(), beast::bind_front_handler(&session::on_write, shared_from_this()));
+                std::chrono::milliseconds duration{50};
+                std::this_thread::sleep_for(duration);
+            }
+            catch (std::exception ex)
+            {
+                std::cout << ex.what();
+            }
+        }
     }
 
-    void
-    on_write(
-        beast::error_code ec,
-        std::size_t bytes_transferred)
+    void on_write(beast::error_code ec, std::size_t bytes_transferred)
     {
         boost::ignore_unused(bytes_transferred);
 
@@ -132,13 +140,10 @@ public:
         buffer_.consume(buffer_.size());
 
         // Do another read
-        do_read();
+        // do_read();
     }
 };
 
-//------------------------------------------------------------------------------
-
-// Accepts incoming connections and launches the sessions
 class listener : public std::enable_shared_from_this<listener>
 {
     net::io_context &ioc_;
@@ -194,8 +199,7 @@ public:
     }
 
 private:
-    void
-    do_accept()
+    void do_accept()
     {
         // The new connection gets its own strand
         acceptor_.async_accept(
@@ -205,8 +209,7 @@ private:
                 shared_from_this()));
     }
 
-    void
-    on_accept(beast::error_code ec, tcp::socket socket)
+    void on_accept(beast::error_code ec, tcp::socket socket)
     {
         if (ec)
         {
