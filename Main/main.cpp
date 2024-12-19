@@ -13,6 +13,10 @@
 #include <vector>
 #include <chrono>
 
+#include "../EchoSounder/ping-cpp/src/device/ping-device-ping1d.h"
+#include "../EchoSounder/ping-cpp/src/Testing/serial-device.h"
+#include "../EchoSounder/ping-cpp/src/Testing/ping-time.h"
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
@@ -25,16 +29,60 @@ void fail(beast::error_code ec, char const *what)
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
+int distance = 0, confidence = 0;
+int ReadPingDevicedata()
+{
+    SerialLink link("/dev/ttyUSB0", 115200);
+    Ping1d *device = new Ping1d(link);
+    if (device->initialize(100))
+    {
+        std::cout << "initialized successfully!" << std::endl;
+    }
+    if (device->set_mode_auto(true))
+    {
+        std::cout << "automode is set" << std::endl;
+    }
+
+    if (device->set_speed_of_sound(343000)) // 343000 //1550000
+    {
+        std::cout << "speed of sound is set" << std::endl;
+    }
+
+    if (device->set_gain_setting(1))
+    {
+        std::cout << "gain settign is set" << std::endl;
+    }
+    if (device->set_ping_enable(1))
+    {
+        std::cout << "gain settign is set" << std::endl;
+    }
+
+    while (true)
+    {
+        ping_message *response = device->request(1212, 1000);
+        if (response == nullptr)
+        {
+            std::cerr << "Failed to receive distance data" << std::endl;
+            // return -1;
+        }
+        if (device->distance_data.confidence >= 0)
+        {
+            distance = device->distance_data.distance;
+            confidence = static_cast<int>(device->distance_data.confidence);
+        }
+    }
+}
+
 class session : public std::enable_shared_from_this<session>
 {
     websocket::stream<beast::tcp_stream> ws_;
     beast::flat_buffer buffer_;
-    std::shared_ptr<net::steady_timer> timer_; // Timer for repeated sends
+    // Timer for repeated sends
+    std::shared_ptr<net::steady_timer> timer_;
     bool first_message_received_ = false;
 
 public:
-    explicit session(tcp::socket &&socket)
-        : ws_(std::move(socket))
+    explicit session(tcp::socket &&socket) : ws_(std::move(socket))
     {
     }
 
@@ -52,18 +100,13 @@ public:
         ws_.set_option(websocket::stream_base::decorator(
             [](websocket::response_type &res)
             {
-                res.set(http::field::server,
-                        std::string(BOOST_BEAST_VERSION_STRING) +
-                            " websocket-server-async");
-                res.set("Access-Control-Allow-Origin", "*");
-                res.set("Access-Control-Allow-Credentials", "true");
+                res.set(http::field::server, std::string(BOOST_BEAST_VERSION_STRING) + " websocket-server-async");
+                //res.set("Access-Control-Allow-Origin", "*");
+                //res.set("Access-Control-Allow-Credentials", "true");
             }));
 
         // Accept the websocket handshake
-        ws_.async_accept(
-            beast::bind_front_handler(
-                &session::on_accept,
-                shared_from_this()));
+        ws_.async_accept(beast::bind_front_handler(&session::on_accept, shared_from_this()));
     }
 
     void on_accept(beast::error_code ec)
@@ -78,9 +121,7 @@ public:
     void do_read()
     {
         // Read a message into our buffer
-        ws_.async_read(
-            buffer_,
-            beast::bind_front_handler(&session::on_read, shared_from_this()));
+        ws_.async_read(buffer_, beast::bind_front_handler(&session::on_read, shared_from_this()));
     }
 
     void on_read(beast::error_code ec, std::size_t bytes_transferred)
@@ -98,10 +139,9 @@ public:
         if (!first_message_received_)
         {
             first_message_received_ = true;
+
             start_sending();
         }
-
-        
     }
 
     // Start the cycle of sending data infinitely
@@ -120,21 +160,20 @@ public:
 
     void on_timer(beast::error_code ec)
     {
+        // Timer was canceled or error occurred
         if (ec)
-            return; // Timer was canceled or error occurred
+            return;
 
         // Prepare the data to send
         buffer_.clear();
-        static int incr=0;
-        std::string res = "New Data"+std::to_string(incr);
+        
+        std::string res = std::to_string(distance) + " " + std::to_string(confidence);
         auto prepared_buffer = buffer_.prepare(res.size());
         boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
         buffer_.commit(res.size());
-        incr++;
+       
         // Write asynchronously
-        ws_.async_write(
-            buffer_.data(),
-            beast::bind_front_handler(&session::on_write, shared_from_this()));
+        ws_.async_write(buffer_.data(), beast::bind_front_handler(&session::on_write, shared_from_this()));
     }
 
     void on_write(beast::error_code ec, std::size_t bytes_transferred)
@@ -162,8 +201,7 @@ class listener : public std::enable_shared_from_this<listener>
     tcp::acceptor acceptor_;
 
 public:
-    listener(net::io_context &ioc, tcp::endpoint endpoint)
-        : ioc_(ioc), acceptor_(ioc)
+    listener(net::io_context &ioc, tcp::endpoint endpoint) : ioc_(ioc), acceptor_(ioc)
     {
         beast::error_code ec;
 
@@ -204,7 +242,7 @@ public:
 private:
     void do_accept()
     {
-        acceptor_.async_accept(net::make_strand(ioc_),beast::bind_front_handler(&listener::on_accept,shared_from_this()));
+        acceptor_.async_accept(net::make_strand(ioc_), beast::bind_front_handler(&listener::on_accept, shared_from_this()));
     }
 
     void on_accept(beast::error_code ec, tcp::socket socket)
@@ -229,15 +267,12 @@ int main(int argc, char *argv[])
     auto const address = net::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(5001);
     auto const threads = 1;
-
-    // The io_context is required for all I/O
+    std::thread t(ReadPingDevicedata);
     net::io_context ioc{threads};
 
-    // Create and launch a listening port
     std::make_shared<listener>(ioc, tcp::endpoint{address, port})->run();
 
-    // Run the I/O service
     ioc.run();
 
-    return EXIT_SUCCESS;
+    return 0;
 }
