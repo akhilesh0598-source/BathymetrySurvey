@@ -1,38 +1,48 @@
 #include "WebSocketServer.hpp"
 
-WebSocketServer ::WebSocketServer()
+WebSocketServer ::WebSocketServer(std::string ip_address,uint port,uint number_of_threads=1)
 {
+
+    boost::asio::io_context ioc{number_of_threads};
+    std::make_shared<WebSocketServer::listener>(ioc, boost::asio::ip::tcp::endpoint{boost::asio::ip::make_address(ip_address), port})->run();
+    ioc.run();
 }
 
-WebSocketServer::session::session(tcp::socket &&socket) : ws_(std::move(socket))
+void WebSocketServer::set_ping_device_variable(int *distance,int *confidence)
 {
-    
+    ping_device_distance_value=distance;
+    ping_device_confidence_value=confidence;
 }
 
-void run()
+WebSocketServer::session::session(boost::asio::ip::tcp::socket &&socket) : ws_(std::move(socket))
 {
-    net::dispatch(ws_.get_executor(), beast::bind_front_handler(&session::on_run, shared_from_this()));
+
 }
 
-void on_run()
+void WebSocketServer::session::run()
+{
+    boost::asio::dispatch(ws_.get_executor(), boost::beast::bind_front_handler(&session::on_run, shared_from_this()));
+}
+
+void WebSocketServer::session::on_run()
 {
     // Set suggested timeout settings for the websocket
-    ws_.set_option(websocket::stream_base::timeout::suggested(beast::role_type::server));
+    ws_.set_option(boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server));
 
     // Set a decorator to change the Server of the handshake
-    ws_.set_option(websocket::stream_base::decorator(
-        [](websocket::response_type &res)
+    ws_.set_option(boost::beast::websocket::stream_base::decorator(
+        [](boost::beast::websocket::response_type &res)
         {
-            res.set(http::field::server, std::string(BOOST_BEAST_VERSION_STRING) + " websocket-server-async");
+            res.set(boost::beast::http::field::server, std::string(BOOST_BEAST_VERSION_STRING) + " websocket-server-async");
             // res.set("Access-Control-Allow-Origin", "*");
             // res.set("Access-Control-Allow-Credentials", "true");
         }));
 
     // Accept the websocket handshake
-    ws_.async_accept(beast::bind_front_handler(&session::on_accept, shared_from_this()));
+    ws_.async_accept(boost::beast::bind_front_handler(&session::on_accept, shared_from_this()));
 }
 
-void on_accept(beast::error_code ec)
+void WebSocketServer::session::on_accept(boost::beast::error_code ec)
 {
     if (ec)
         return fail(ec, "accept");
@@ -41,18 +51,18 @@ void on_accept(beast::error_code ec)
     do_read();
 }
 
-void do_read()
+void WebSocketServer::session::do_read()
 {
     // Read a message into our buffer
-    ws_.async_read(buffer_, beast::bind_front_handler(&session::on_read, shared_from_this()));
+    ws_.async_read(buffer_, boost::beast::bind_front_handler(&session::on_read, shared_from_this()));
 }
 
-void on_read(beast::error_code ec, std::size_t bytes_transferred)
+void WebSocketServer::session::on_read(boost::beast::error_code ec, std::size_t bytes_transferred)
 {
     boost::ignore_unused(bytes_transferred);
 
     // This indicates that the session was closed by the client
-    if (ec == websocket::error::closed)
+    if (ec == boost::beast::websocket::error::closed)
         return;
     if (ec)
         return fail(ec, "read");
@@ -68,20 +78,21 @@ void on_read(beast::error_code ec, std::size_t bytes_transferred)
 }
 
 // Start the cycle of sending data infinitely
-void start_sending()
+void WebSocketServer::session::start_sending()
 {
-    timer_ = std::make_shared<net::steady_timer>(ws_.get_executor());
+    timer_ = std::make_shared<boost::asio::steady_timer>(ws_.get_executor());
     schedule_send();
 }
 
-void schedule_send()
+void WebSocketServer::session::schedule_send()
 {
+    using namespace std::chrono_literals;
     // Schedule the next send after some interval (50ms)
     timer_->expires_after(50ms);
-    timer_->async_wait(beast::bind_front_handler(&session::on_timer, shared_from_this()));
+    timer_->async_wait(boost::beast::bind_front_handler(&session::on_timer, shared_from_this()));
 }
 
-void on_timer(beast::error_code ec)
+void WebSocketServer::session::on_timer(boost::beast::error_code ec)
 {
     // Timer was canceled or error occurred
     if (ec)
@@ -90,16 +101,16 @@ void on_timer(beast::error_code ec)
     // Prepare the data to send
     buffer_.clear();
 
-    std::string res = std::to_string(distance) + " " + std::to_string(confidence);
+    std::string res = std::to_string(*this->ping_device_confidence_value) + " " + std::to_string(*WebSocketServer::ping_device_confidence_value);
     auto prepared_buffer = buffer_.prepare(res.size());
     boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
     buffer_.commit(res.size());
 
     // Write asynchronously
-    ws_.async_write(buffer_.data(), beast::bind_front_handler(&session::on_write, shared_from_this()));
+    ws_.async_write(buffer_.data(), boost::beast::bind_front_handler(&session::on_write, shared_from_this()));
 }
 
-void on_write(beast::error_code ec, std::size_t bytes_transferred)
+void WebSocketServer::session::on_write(boost::beast::error_code ec, std::size_t bytes_transferred)
 {
     boost::ignore_unused(bytes_transferred);
 
@@ -116,74 +127,62 @@ void on_write(beast::error_code ec, std::size_t bytes_transferred)
     // Schedule the next send
     schedule_send();
 }
-}
-;
 
-class listener : public std::enable_shared_from_this<listener>
+WebSocketServer::listener::listener(boost::asio::io_context &ioc, boost::asio::ip::tcp::endpoint endpoint) : ioc_(ioc), acceptor_(ioc)
 {
-    net::io_context &ioc_;
-    tcp::acceptor acceptor_;
+    boost::beast::error_code ec;
 
-public:
-    listener(net::io_context &ioc, tcp::endpoint endpoint) : ioc_(ioc), acceptor_(ioc)
+    acceptor_.open(endpoint.protocol(), ec);
+    if (ec)
     {
-        beast::error_code ec;
-
-        acceptor_.open(endpoint.protocol(), ec);
-        if (ec)
-        {
-            fail(ec, "open");
-            return;
-        }
-
-        acceptor_.set_option(net::socket_base::reuse_address(true), ec);
-        if (ec)
-        {
-            fail(ec, "set_option");
-            return;
-        }
-
-        acceptor_.bind(endpoint, ec);
-        if (ec)
-        {
-            fail(ec, "bind");
-            return;
-        }
-
-        acceptor_.listen(net::socket_base::max_listen_connections, ec);
-        if (ec)
-        {
-            fail(ec, "listen");
-            return;
-        }
+        fail(ec, "open");
+        return;
     }
 
-    void run()
+    acceptor_.set_option(boost::asio::socket_base::reuse_address(true), ec);
+    if (ec)
     {
-        do_accept();
+        fail(ec, "set_option");
+        return;
     }
 
-private:
-    void do_accept()
+    acceptor_.bind(endpoint, ec);
+    if (ec)
     {
-        acceptor_.async_accept(net::make_strand(ioc_), beast::bind_front_handler(&listener::on_accept, shared_from_this()));
+        fail(ec, "bind");
+        return;
     }
 
-    void on_accept(beast::error_code ec, tcp::socket socket)
+    acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
+    if (ec)
     {
-        if (ec)
-        {
-            fail(ec, "accept");
-        }
-        else
-        {
-            // Create the session and run it
-            std::make_shared<session>(std::move(socket))->run();
-        }
-
-        // Accept another connection
-        do_accept();
+        fail(ec, "listen");
+        return;
     }
-};
 }
-;
+
+void WebSocketServer::listener::run()
+{
+    do_accept();
+}
+
+void WebSocketServer::listener::do_accept()
+{
+    acceptor_.async_accept(boost::asio::make_strand(ioc_), boost::beast::bind_front_handler(&listener::on_accept, shared_from_this()));
+}
+
+void WebSocketServer::listener::on_accept(boost::beast::error_code ec, boost::asio::ip::tcp::socket socket)
+{
+    if (ec)
+    {
+        fail(ec, "accept");
+    }
+    else
+    {
+        // Create the session and run it
+        std::make_shared<session>(std::move(socket))->run();
+    }
+
+    // Accept another connection
+    do_accept();
+};

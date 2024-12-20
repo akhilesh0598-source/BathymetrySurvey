@@ -30,6 +30,7 @@ void fail(beast::error_code ec, char const *what)
 }
 
 int distance = 0, confidence = 0;
+
 int ReadPingDevicedata()
 {
     SerialLink link("/dev/ttyUSB0", 115200);
