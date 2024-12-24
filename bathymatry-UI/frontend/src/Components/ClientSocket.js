@@ -1,14 +1,14 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function ClientSocket() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState({});
   const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
+  const openWebSocket=() => {
  
     const ws = new WebSocket("ws://localhost:5001");
-
+    setSocket(ws);
     // Handle WebSocket open event
     ws.onopen = () => {
       console.log("Connected to WebSocket server");
@@ -18,29 +18,54 @@ function ClientSocket() {
     // Handle messages from the server
     ws.onmessage = (event) => {
       //console.log(`Message from server: ${event.data}`);
-      setValue(event.data);
+      const data=event.data;
+      try{
+      const parsedData=JSON.parse(data);
+      setValue(parsedData);  
+      }
+      catch
+      {
+        console.log("Parsing Error!!");
+      }
+      
     };
 
     ws.onclose = () => {
       console.log("Disconnected from WebSocket server");
+      if(socket)
+        setTimeout(openWebSocket,1000);
     };
 
     ws.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
 
-    setSocket(ws);
+  };
 
-    // Cleanup function to close the WebSocket connection on component unmount
-    return () => {
-      ws.close();
-      console.log("WebSocket connection closed");
-    };
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
+const handleStop=()=>{
+  if(socket)
+  {
+    socket.close();
+    setSocket(null);
+    setValue('')
+    console.log("Websocket is stopped!!");
+  }
+};
+
+const handleStart=()=>{
+  if(!socket || socket.readyState===WebSocket.CLOSED)
+  {
+    openWebSocket();
+    console.log("Websocket is opened!!");
+  }
+}
 
   return (
     <>
-      <h1>Echo Sounder Value: {value}</h1>
+      <h1>Echo Sounder Values: </h1>
+      <h2>Distance: {value.distance}</h2>
+      <h2>Confidence: {value.confidence}</h2>
+      <button onClick={socket==null? handleStart:handleStop}>{socket==null?"Start Reading":"Stop Reading"}</button>
     </>
   );
 }
