@@ -78,7 +78,7 @@ void session::schedule_send()
 {
     using namespace std::chrono_literals;
     // Schedule the next send after some interval (50ms)
-    timer_->expires_after(50ms);
+    timer_->expires_after(100ms);
     timer_->async_wait(boost::beast::bind_front_handler(&session::on_timer, shared_from_this()));
 }
 
@@ -91,7 +91,7 @@ void session::on_timer(boost::beast::error_code ec)
     // Prepare the data to send
     buffer_.clear();
 
-    std::string res = "{\"distance\":\""+std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence)+"\" }";
+    std::string res = "{\"distance\":\""+std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence)+"\",\"gpsDateTime\":\""+gpsDateTime + "\",\"gpsLatitude\":\""+std::to_string(gpsLatitude)+"\",\"gpsLongitude\":\""+std::to_string(gpsLongitude)+"\"}";
     auto prepared_buffer = buffer_.prepare(res.size());
     boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
     buffer_.commit(res.size());

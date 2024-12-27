@@ -2,9 +2,17 @@
 #include "../EchoSounderDevice/PingMain/EchoSounder.h"
 #include "../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp"
 #include "../WebSocket/WebSocketServer.hpp"
+#include "../GPSDevice/Device/gps_reader.cpp"
 
 int pingDeviceDistance=0;
 int pingDeviceConfidence=0;
+
+#define path "/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/gps_data.txt"
+
+int readGPSDeviceData()
+{
+    read_gps(path);
+}
 
 int readPingDevicedata()
 {
@@ -29,7 +37,8 @@ int readPingDevicedata()
 int main(int argc, char *argv[])
 {
     
-    std::thread t(readPingDevicedata);
+    std::thread PingDeviceThread(readPingDevicedata);
+    std::thread GPSDeviceThread(readGPSDeviceData);
     auto const address = boost::asio::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(5001);
     auto const threads = 1;

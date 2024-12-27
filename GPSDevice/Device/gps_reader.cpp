@@ -5,7 +5,6 @@
 
 #include "gps_parser.cpp"
 
-
 void read_gps(std::string filePath)
 {
     std::ifstream gps_file;

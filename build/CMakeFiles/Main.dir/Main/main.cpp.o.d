@@ -1937,4 +1937,12 @@ CMakeFiles/Main.dir/Main/main.cpp.o: \
  /usr/local/include/boost/beast/websocket/impl/read.hpp \
  /usr/local/include/boost/beast/websocket/impl/stream.hpp \
  /usr/local/include/boost/beast/websocket/impl/write.hpp \
- /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp
+ /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp \
+ /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/../GPSDevice/Device/gps_reader.cpp \
+ /usr/include/c++/11/fstream /usr/include/c++/11/bits/codecvt.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/../GPSDevice/Device/gps_parser.cpp \
+ /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/../GPSDevice/Device/../../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp

@@ -1,39 +1,34 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function ClientSocket() {
+function ClientSocket() 
+{
   const [value, setValue] = useState({});
   const [socket, setSocket] = useState(null);
 
-  const openWebSocket=() => {
- 
+  const openWebSocket = () => {
+
+    if (socket) return;
     const ws = new WebSocket("ws://localhost:5001");
-    setSocket(ws);
-    // Handle WebSocket open event
+
     ws.onopen = () => {
       console.log("Connected to WebSocket server");
-      ws.send("Hello Server!"); // Send initial message
+      ws.send("Hello Server!");
+      setSocket(ws);
     };
 
-    // Handle messages from the server
     ws.onmessage = (event) => {
-      //console.log(`Message from server: ${event.data}`);
-      const data=event.data;
-      try{
-      const parsedData=JSON.parse(data);
-      setValue(parsedData);  
+      try {
+        const parsedData = JSON.parse(event.data);
+        setValue(parsedData);
+      } catch (error) {
+        console.error("Parsing Error:", error);
       }
-      catch
-      {
-        console.log("Parsing Error!!");
-      }
-      
     };
 
     ws.onclose = () => {
       console.log("Disconnected from WebSocket server");
-      if(socket)
-        setTimeout(openWebSocket,1000);
+      setValue({});
     };
 
     ws.onerror = (error) => {
@@ -42,30 +37,44 @@ function ClientSocket() {
 
   };
 
-const handleStop=()=>{
-  if(socket)
-  {
-    socket.close();
-    setSocket(null);
-    setValue('')
-    console.log("Websocket is stopped!!");
-  }
-};
+  const handleStop = () => {
+    if (socket) {
+      socket.close();
+      setSocket(null);
+      console.log("WebSocket is stopped!");
+    }
+    setValue({});
 
-const handleStart=()=>{
-  if(!socket || socket.readyState===WebSocket.CLOSED)
-  {
-    openWebSocket();
-    console.log("Websocket is opened!!");
-  }
-}
+  };
+
+  const handleStart = () => {
+    
+      openWebSocket();
+      console.log("WebSocket is starting...");
+    
+  };
+
+  useEffect(() => {
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [socket]);
 
   return (
     <>
       <h1>Echo Sounder Values: </h1>
-      <h2>Distance: {value.distance}</h2>
-      <h2>Confidence: {value.confidence}</h2>
-      <button onClick={socket==null? handleStart:handleStop}>{socket==null?"Start Reading":"Stop Reading"}</button>
+      <h2>Distance: {value.distance || "N/A"}</h2>
+      <h2>Confidence: {value.confidence || "N/A"}</h2>
+      <h2>GPS UTCTime: {value.gpsDateTime || "N/A"}</h2>
+      <h2>GPS Latitude: {value.gpsLatitude || "N/A"}</h2>
+      <h2>GPS Longitude: {value.gpsLongitude || "N/A"}</h2>
+
+      <button onClick={socket ? handleStop : handleStart}>
+        {socket ? "Stop Reading" : "Start Reading"}
+      </button>
     </>
   );
 }
