@@ -18,7 +18,7 @@ void session::on_run()
 {
     // Set suggested timeout settings for the websocket
     ws_.set_option(boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server));
-
+    //ws_.set_option(boost::beast::websocket::stream_base::timeout::keep_alive_pings);
     // Set a decorator to change the Server of the handshake
     ws_.set_option(boost::beast::websocket::stream_base::decorator(
         [](boost::beast::websocket::response_type &res)
@@ -78,7 +78,7 @@ void session::schedule_send()
 {
     using namespace std::chrono_literals;
     // Schedule the next send after some interval (50ms)
-    timer_->expires_after(100ms);
+    timer_->expires_after(50ms);
     timer_->async_wait(boost::beast::bind_front_handler(&session::on_timer, shared_from_this()));
 }
 

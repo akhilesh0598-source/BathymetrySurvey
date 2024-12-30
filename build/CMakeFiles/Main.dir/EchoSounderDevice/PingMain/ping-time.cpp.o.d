@@ -1,7 +1,7 @@
 CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o: \
- /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp \
+ /home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp \
  /usr/include/stdc-predef.h \
- /home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/PingMain/ping-time.h \
+ /home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/PingMain/ping-time.h \
  /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
  /usr/include/c++/11/type_traits \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core
+CXX_INCLUDES = -I/home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core
 
 CXX_FLAGS = -std=gnu++17
 

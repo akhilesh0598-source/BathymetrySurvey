@@ -7,7 +7,8 @@
 int pingDeviceDistance=0;
 int pingDeviceConfidence=0;
 
-#define path "/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/Main/gps_data.txt"
+
+#define path "/home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core/Main/gps_data.txt"
 
 int readGPSDeviceData()
 {
@@ -29,7 +30,7 @@ int readPingDevicedata()
             pingDeviceDistance = ping1d.distance_data.distance;
             pingDeviceConfidence = static_cast<int>(ping1d.distance_data.confidence);
         }
-        PingTime::microsecondDelay(1000);
+        PingTime::microsecondDelay(100000);
     }
     closePingDevice();
 }
@@ -47,6 +48,6 @@ int main(int argc, char *argv[])
     std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{address, port})->run();
 
     ioc.run();
-
+    
     return 0;
 }
