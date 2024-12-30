@@ -17,8 +17,22 @@ void session::run()
 void session::on_run()
 {
     // Set suggested timeout settings for the websocket
-    ws_.set_option(boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server));
-    //ws_.set_option(boost::beast::websocket::stream_base::timeout::keep_alive_pings);
+    boost::beast::websocket::stream_base::timeout to =
+        boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server);
+
+    // 2. Enable keep-alive pings
+    to.keep_alive_pings = true;
+    //to.idle_timeout = std::chrono::seconds::zero();
+    //to.handshake_timeout=std::chrono::seconds(30);
+    // 3. Apply to your WebSocket stream
+    ws_.set_option(to);
+//     boost::beast::websocket::stream_base::timeout t;
+// //t.handshake_timeout = std::chrono::seconds::zero(); // Disable handshake timeout
+// t.idle_timeout = std::chrono::seconds::zero();      // Disable idle timeout
+// t.keep_alive_pings = false;                         // Disable pings
+
+// ws_.set_option(t);
+
     // Set a decorator to change the Server of the handshake
     ws_.set_option(boost::beast::websocket::stream_base::decorator(
         [](boost::beast::websocket::response_type &res)
@@ -65,6 +79,7 @@ void session::on_read(boost::beast::error_code ec, std::size_t bytes_transferred
 
         start_sending();
     }
+    do_read();
 }
 
 // Start the cycle of sending data infinitely
@@ -91,7 +106,7 @@ void session::on_timer(boost::beast::error_code ec)
     // Prepare the data to send
     buffer_.clear();
 
-    std::string res = "{\"distance\":\""+std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence)+"\",\"gpsDateTime\":\""+gpsDateTime + "\",\"gpsLatitude\":\""+std::to_string(gpsLatitude)+"\",\"gpsLongitude\":\""+std::to_string(gpsLongitude)+"\"}";
+    std::string res = "{\"distance\":\"" + std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence) + "\",\"gpsDateTime\":\"" + gpsDateTime + "\",\"gpsLatitude\":\"" + std::to_string(gpsLatitude) + "\",\"gpsLongitude\":\"" + std::to_string(gpsLongitude) + "\"}";
     auto prepared_buffer = buffer_.prepare(res.size());
     boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
     buffer_.commit(res.size());
