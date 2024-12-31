@@ -21,10 +21,11 @@ void read_gps(std::string filePath)
         while (std::getline(gps_file,line))
         {
             parseGPSLine(line);
+            
         } 
         gps_file.clear();
         gps_file.seekg(0, std::ios::beg);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     return;
     

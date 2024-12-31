@@ -1,4 +1,4 @@
-# Install script for directory: /home/akhilesh-chaurasiya/Desktop/bathymetric-core
+# Install script for directory: /home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/akhilesh-chaurasiya/Desktop/bathymetric-core/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

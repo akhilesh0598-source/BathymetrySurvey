@@ -20,26 +20,13 @@ void session::on_run()
     boost::beast::websocket::stream_base::timeout to =
         boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server);
 
-    // 2. Enable keep-alive pings
     to.keep_alive_pings = true;
-    //to.idle_timeout = std::chrono::seconds::zero();
-    //to.handshake_timeout=std::chrono::seconds(30);
-    // 3. Apply to your WebSocket stream
+   
     ws_.set_option(to);
-//     boost::beast::websocket::stream_base::timeout t;
-// //t.handshake_timeout = std::chrono::seconds::zero(); // Disable handshake timeout
-// t.idle_timeout = std::chrono::seconds::zero();      // Disable idle timeout
-// t.keep_alive_pings = false;                         // Disable pings
-
-// ws_.set_option(t);
-
-    // Set a decorator to change the Server of the handshake
     ws_.set_option(boost::beast::websocket::stream_base::decorator(
         [](boost::beast::websocket::response_type &res)
         {
             res.set(boost::beast::http::field::server, std::string(BOOST_BEAST_VERSION_STRING) + " websocket-server-async");
-            // res.set("Access-Control-Allow-Origin", "*");
-            // res.set("Access-Control-Allow-Credentials", "true");
         }));
 
     // Accept the websocket handshake
@@ -50,14 +37,11 @@ void session::on_accept(boost::beast::error_code ec)
 {
     if (ec)
         return fail(ec, "accept");
-
-    // Wait for the first message from the client
     do_read();
 }
 
 void session::do_read()
 {
-    // Read a message into our buffer
     ws_.async_read(buffer_, boost::beast::bind_front_handler(&session::on_read, shared_from_this()));
 }
 
