@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import ClientSocket from './Components/ClientSocket';
 import reportWebVitals from './reportWebVitals';
+import 'leaflet/dist/leaflet.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ClientSocket/>
+   
   </React.StrictMode>
 );
 

@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from "react";
+import OfflineMap from "./OfflineMap";
 
 function ClientSocket() 
 {
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({gpsLatitude:0,gpsLongitude:0,gpsDateTime:''});
   const [socket, setSocket] = useState(null);
 
   const openWebSocket = () => {
@@ -44,11 +45,10 @@ function ClientSocket()
       console.log("WebSocket is stopped!");
     }
     setValue({});
-
   };
 
   const handleStart = () => {
-    
+  
       openWebSocket();
       console.log("WebSocket is starting...");
     
@@ -75,6 +75,8 @@ function ClientSocket()
       <button onClick={socket ? handleStop : handleStart}>
         {socket ? "Stop Reading" : "Start Reading"}
       </button>
+
+      <OfflineMap />
     </>
   );
 }
