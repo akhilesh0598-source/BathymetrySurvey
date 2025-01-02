@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import OfflineMap from "./OfflineMap";
 
 function ClientSocket() 
 {
-  const [value, setValue] = useState({gpsLatitude:0,gpsLongitude:0,gpsDateTime:''});
+  const [value, setValue] = useState({distance:0,confidence:0,gpsLatitude:23.406855,gpsLongitude:77.694556,gpsDateTime:'00:00:00',zoomVal:3});
   const [socket, setSocket] = useState(null);
 
   const openWebSocket = () => {
@@ -21,21 +20,26 @@ function ClientSocket()
     ws.onmessage = (event) => {
       try {
         const parsedData = JSON.parse(event.data);
+        //parsedData=Object(parsedData);
+        
+        parsedData['zoomVal']=14;
+        //console.log(parsedData);
+        console.log(parsedData.zoomVal);
         setValue(parsedData);
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         console.error("Parsing Error:", error);
       }
     };
 
     ws.onclose = () => {
       console.log("Disconnected from WebSocket server");
-      setValue({});
     };
 
     ws.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
-
   };
 
   const handleStop = () => {
@@ -44,14 +48,12 @@ function ClientSocket()
       setSocket(null);
       console.log("WebSocket is stopped!");
     }
-    setValue({});
+    setValue({distance:0,confidence:0,gpsLatitude:23.406855,gpsLongitude:77.694556,gpsDateTime:'00:00:00',zoomVal:3});
   };
 
   const handleStart = () => {
-  
       openWebSocket();
       console.log("WebSocket is starting...");
-    
   };
 
   useEffect(() => {
@@ -65,18 +67,18 @@ function ClientSocket()
 
   return (
     <>
-      <h1>Echo Sounder Values: </h1>
-      <h2>Distance: {value.distance || "N/A"}</h2>
-      <h2>Confidence: {value.confidence || "N/A"}</h2>
-      <h2>GPS UTCTime: {value.gpsDateTime || "N/A"}</h2>
-      <h2>GPS Latitude: {value.gpsLatitude || "N/A"}</h2>
-      <h2>GPS Longitude: {value.gpsLongitude || "N/A"}</h2>
+      <h1>Echo Sounder and GPS Values: </h1>
+      <h2>Distance: {value.distance}</h2>
+      <h2>Confidence: {value.confidence}</h2>
+      <h2>GPS UTCTime: {value.gpsDateTime }</h2>
+      <h2>GPS Latitude: {value.gpsLatitude }</h2>
+      <h2>GPS Longitude: {value.gpsLongitude }</h2>
 
       <button onClick={socket ? handleStop : handleStart}>
         {socket ? "Stop Reading" : "Start Reading"}
       </button>
 
-      <OfflineMap />
+      <OfflineMap gpsData={value}/>
     </>
   );
 }
