@@ -1,6 +1,8 @@
 #include "GPSDevice.hpp"
 
-
+std::string gpsDateTime = "";
+double gpsLatitude = 0;
+double gpsLongitude = 0;
 
 GPSDevice::GPSDevice(std::string device_port, uint baudrate)
     : serial_port(io_context), device_port(device_port), baudrate(baudrate)

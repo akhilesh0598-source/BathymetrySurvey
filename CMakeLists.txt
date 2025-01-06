@@ -16,6 +16,8 @@ set(SOURCE_FILES
     EchoSounderDevice/message/ping-message-common.h
     EchoSounderDevice/message/ping-message-bluebps.h
     WebSocket/WebSocketServer.cpp
+    GPSDevice/Device/GPSDevice.cpp
+    Utility/Utility.cpp
 )
 
 find_package(Boost 1.86 EXACT REQUIRED COMPONENTS system)

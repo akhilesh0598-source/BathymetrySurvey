@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GPSDEVICE_HPP
+#define GPSDEVICE_HPP
 
 #include <iostream>
 #include <boost/asio/io_context.hpp>
@@ -13,9 +14,6 @@
 
 #define SERIAL_PORT_READ_BUF_SIZE 1024
 
-std::string gpsDateTime = "";
-double gpsLatitude = 0;
-double gpsLongitude = 0;
 
 class GPSDevice
 {
@@ -41,3 +39,4 @@ private:
     double dm_to_dd_longitude(std::string longitude);
     void parseGPSLine(std::string &line);
 };
+#endif

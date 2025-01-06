@@ -225,6 +225,30 @@ EchoSounderDevice/device/ping-device.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.s
 .PHONY : EchoSounderDevice/device/ping-device.cpp.s
 
+GPSDevice/Device/GPSDevice.o: GPSDevice/Device/GPSDevice.cpp.o
+.PHONY : GPSDevice/Device/GPSDevice.o
+
+# target to build an object file
+GPSDevice/Device/GPSDevice.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o
+.PHONY : GPSDevice/Device/GPSDevice.cpp.o
+
+GPSDevice/Device/GPSDevice.i: GPSDevice/Device/GPSDevice.cpp.i
+.PHONY : GPSDevice/Device/GPSDevice.i
+
+# target to preprocess a source file
+GPSDevice/Device/GPSDevice.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.i
+.PHONY : GPSDevice/Device/GPSDevice.cpp.i
+
+GPSDevice/Device/GPSDevice.s: GPSDevice/Device/GPSDevice.cpp.s
+.PHONY : GPSDevice/Device/GPSDevice.s
+
+# target to generate assembly for a file
+GPSDevice/Device/GPSDevice.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.s
+.PHONY : GPSDevice/Device/GPSDevice.cpp.s
+
 Main/main.o: Main/main.cpp.o
 .PHONY : Main/main.o
 
@@ -248,6 +272,30 @@ Main/main.s: Main/main.cpp.s
 Main/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
+
+Utility/Utility.o: Utility/Utility.cpp.o
+.PHONY : Utility/Utility.o
+
+# target to build an object file
+Utility/Utility.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.o
+.PHONY : Utility/Utility.cpp.o
+
+Utility/Utility.i: Utility/Utility.cpp.i
+.PHONY : Utility/Utility.i
+
+# target to preprocess a source file
+Utility/Utility.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.i
+.PHONY : Utility/Utility.cpp.i
+
+Utility/Utility.s: Utility/Utility.cpp.s
+.PHONY : Utility/Utility.s
+
+# target to generate assembly for a file
+Utility/Utility.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.s
+.PHONY : Utility/Utility.cpp.s
 
 WebSocket/WebSocketServer.o: WebSocket/WebSocketServer.cpp.o
 .PHONY : WebSocket/WebSocketServer.o
@@ -294,9 +342,15 @@ help:
 	@echo "... EchoSounderDevice/device/ping-device.o"
 	@echo "... EchoSounderDevice/device/ping-device.i"
 	@echo "... EchoSounderDevice/device/ping-device.s"
+	@echo "... GPSDevice/Device/GPSDevice.o"
+	@echo "... GPSDevice/Device/GPSDevice.i"
+	@echo "... GPSDevice/Device/GPSDevice.s"
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
+	@echo "... Utility/Utility.o"
+	@echo "... Utility/Utility.i"
+	@echo "... Utility/Utility.s"
 	@echo "... WebSocket/WebSocketServer.o"
 	@echo "... WebSocket/WebSocketServer.i"
 	@echo "... WebSocket/WebSocketServer.s"

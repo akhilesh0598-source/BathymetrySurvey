@@ -2,16 +2,16 @@
 #include "../EchoSounderDevice/PingMain/EchoSounder.h"
 #include "../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp"
 #include "../WebSocket/WebSocketServer.hpp"
-#include "../GPSDevice/Device/gps_reader.cpp"
+#include "../GPSDevice/Device/GPSDevice.hpp"
 
 int pingDeviceDistance=0;
 int pingDeviceConfidence=0;
 
-#define path "/home/akhilesh/Desktop/Working/Planys_Project_Bathymatric/bathymetric-core/Main/gps_data.txt"
+GPSDevice gpsDevice("/dev/ttyUSB0",19200);
 
 int readGPSDeviceData()
 {
-    read_gps(path);
+    gpsDevice.Start();
     return 0;
 }
 
