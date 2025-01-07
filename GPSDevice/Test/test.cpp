@@ -21,7 +21,7 @@ int main()
         itr++;
         //std::cout<<itr<<std::endl;
     }
-    gpsDevice.stop();
+    gpsDevice.Stop();
     
     return 0;
 }

@@ -1,18 +1,27 @@
 #include<iostream>
 #include "../EchoSounderDevice/PingMain/EchoSounder.h"
-#include "../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp"
 #include "../WebSocket/WebSocketServer.hpp"
 #include "../GPSDevice/Device/GPSDevice.hpp"
 
-int pingDeviceDistance=0;
-int pingDeviceConfidence=0;
-
 GPSDevice gpsDevice("/dev/ttyUSB0",19200);
+bool keepRunning=true;
 
 int readGPSDeviceData()
 {
-    gpsDevice.Start();
+    try
+    {
+        gpsDevice.Start();
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error initializing GPS device: " << ex.what() << std::endl;
+        return -1;
+    }
+    while (keepRunning)
+        std::this_thread::sleep_for(std::chrono::seconds(1)); 
+    gpsDevice.Stop();
     return 0;
+
 }
 
 int readPingDevicedata()
@@ -37,16 +46,15 @@ int readPingDevicedata()
 
 int main(int argc, char *argv[])
 {
-    
     std::thread PingDeviceThread(readPingDevicedata);
-    std::thread GPSDeviceThread(readGPSDeviceData);
+    //std::thread GPSDeviceThread(readGPSDeviceData);
     auto const address = boost::asio::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(5001);
     auto const threads = 1;
     boost::asio::io_context ioc{threads};
 
     std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{address, port})->run();
-
+    
     ioc.run();
     
     return 0;

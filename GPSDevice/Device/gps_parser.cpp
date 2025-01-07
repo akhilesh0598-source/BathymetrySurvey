@@ -10,6 +10,8 @@
 std::string gpsDateTime = "";
 double gpsLatitude = 0;
 double gpsLongitude = 0;
+int pingDeviceDistance=0;
+int pingDeviceConfidence=0;
 
 std::vector<std::string> splitLine(std::string &line, char delimeter = ',')
 {
@@ -43,15 +45,16 @@ void parseGPSLine(std::string &line)
 {
     try
     {
-        // std::cout<<line<<std::endl;
-        // line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
+        if (!line.empty() && (line[0] == '\r' || line[0] == '\n')) {
+            line.erase(0, 1); 
+        }
         std::vector<std::string> tokens = splitLine(line);
         std::string identifier = "$GPGGA";
         if (tokens.empty() || tokens[0].compare(identifier) != 0)
         {
             return;
         }
-        std::cout << line << std::endl;
+        //std::cout << line << std::endl;
         std::string utc_time = tokens[1].substr(0, 2) + ":" + tokens[1].substr(2, 2) + ":" + tokens[1].substr(4, 2);
 
         double latitude = dm_to_dd_latitude(tokens[2]);
