@@ -1,5 +1,5 @@
 #include<iostream>
-#include "../Device/GPSDevice.cpp"
+#include "../Device/GPSDevice.hpp"
 //#include "../Device/gps_reader.cpp"
 
 int main()
@@ -13,7 +13,6 @@ int main()
     bool start=false;
     while(true)
     {
-
         if(!start&&gpsDevice.Start())
         {
             start=true;

@@ -44,10 +44,15 @@ int readPingDevicedata()
     closePingDevice();
 }
 
+initSigHandler()
+{
+    
+}
+
 int main(int argc, char *argv[])
 {
-    std::thread PingDeviceThread(readPingDevicedata);
-    //std::thread GPSDeviceThread(readGPSDeviceData);
+    //std::thread PingDeviceThread(readPingDevicedata);
+    std::thread GPSDeviceThread(readGPSDeviceData);
     auto const address = boost::asio::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(5001);
     auto const threads = 1;

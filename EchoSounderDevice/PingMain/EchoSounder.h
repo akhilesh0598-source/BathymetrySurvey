@@ -4,7 +4,7 @@
 #include "serial-device.h"
 #include "ping-time.h"
 
-SerialLink serialLink("/dev/ttyUSB0",115200);
+SerialLink serialLink("/dev/ttyUSB1",115200);
 Ping1d ping1d(serialLink);
 
 void initializePingDevice()

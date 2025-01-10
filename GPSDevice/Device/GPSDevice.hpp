@@ -24,7 +24,6 @@ private:
     char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE]={0};
     std::string read_buf_str;
     boost::mutex mutex_;
-    char end_of_line_char_ = 0x0d;
 
 public:
     GPSDevice(std::string device_port, uint baudrate);

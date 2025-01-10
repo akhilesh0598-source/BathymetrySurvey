@@ -3,6 +3,7 @@ import OfflineMap from "./OfflineMap";
 
 function ClientSocket() 
 {
+  //const [serverStatus,setServerStatus]=useState('Not Connected!');
   const [value, setValue] = useState({distance:0,confidence:0,gpsLatitude:23.406855,gpsLongitude:77.694556,gpsDateTime:'00:00:00',zoomVal:3});
   const [socket, setSocket] = useState(null);
 
@@ -20,8 +21,6 @@ function ClientSocket()
     ws.onmessage = (event) => {
       try {
         const parsedData = JSON.parse(event.data);
-        //parsedData=Object(parsedData);
-        
         parsedData['zoomVal']=14;
         //console.log(parsedData);
         console.log(parsedData.zoomVal);
@@ -35,6 +34,7 @@ function ClientSocket()
 
     ws.onclose = () => {
       console.log("Disconnected from WebSocket server");
+      setSocket(null);
     };
 
     ws.onerror = (error) => {
@@ -67,6 +67,7 @@ function ClientSocket()
 
   return (
     <>
+      <h1>Connected status:  {!socket? 'Not Connected':'Connected'}</h1>
       <h1>Echo Sounder and GPS Values: </h1>
       <h2>Distance: {value.distance}</h2>
       <h2>Confidence: {value.confidence}</h2>

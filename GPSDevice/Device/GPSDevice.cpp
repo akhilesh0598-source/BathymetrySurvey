@@ -3,12 +3,13 @@
 std::string gpsDateTime = "";
 double gpsLatitude = 0;
 double gpsLongitude = 0;
-int pingDeviceDistance=0;
-int pingDeviceConfidence=0;
+int pingDeviceDistance = 0;
+int pingDeviceConfidence = 0;
 
 GPSDevice::GPSDevice(std::string device_port, uint baudrate)
     : serial_port(io_context), device_port(device_port), baudrate(baudrate)
 {
+    std::cout << "GPS device is initialized!!" << std::endl;
 }
 
 bool GPSDevice::Start()
@@ -25,6 +26,7 @@ bool GPSDevice::Start()
     std::thread t([&]()
                   { io_context.run(); });
     t.detach();
+    std::cout << "Reading started!" << std::endl;
     async_read_some();
     return true;
 }
@@ -53,7 +55,7 @@ void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_tra
     for (int i = 0; i < bytes_transferred; i++)
     {
         char c = read_buf_raw_[i];
-        if (c == end_of_line_char_)
+        if (c == '\r' || c == '\n')
         {
             parseGPSLine(read_buf_str);
             read_buf_str.clear();
@@ -63,7 +65,7 @@ void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_tra
             read_buf_str += c;
         }
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     async_read_some();
 }
 
@@ -99,16 +101,14 @@ void GPSDevice::parseGPSLine(std::string &line)
 {
     try
     {
-        if (line.substr(0, 6) != "$GPGGA")
-            return;
         std::cout << line << std::endl;
+        if (line.length() >= 6 && line.substr(0, 6) != "$GPGGA")
+            return;
         std::vector<std::string> tokens = splitLine(line);
-        std::string identifier = "$GPGGA";
-        if (tokens.empty() || tokens[0].compare(identifier) != 0 && tokens.size() < 6)
+        if (tokens.empty() && tokens.size() < 6)
         {
             return;
         }
-
         std::string utc_time = tokens[1].substr(0, 2) + ":" + tokens[1].substr(2, 2) + ":" + tokens[1].substr(4, 2);
 
         double latitude = dm_to_dd_latitude(tokens[2]);
@@ -116,14 +116,13 @@ void GPSDevice::parseGPSLine(std::string &line)
 
         double longitude = dm_to_dd_longitude(tokens[4]);
         longitude = tokens[5] == "W" ? longitude * -1 : longitude;
-        // boost::mutex::scoped_lock look(mutex_);
         gpsDateTime = utc_time;
         gpsLatitude = latitude;
         gpsLongitude = longitude;
         // std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        // std::cout << "time: " << utc_time << "\n";
-        // std::cout << "latitude: " << latitude << "\n";
-        // std::cout << "longitude: " << longitude << "\n";
+        std::cout << "time: " << utc_time << "\n";
+        std::cout << "latitude: " << latitude << "\n";
+        std::cout << "longitude: " << longitude << "\n";
     }
     catch (std::exception ex)
     {
