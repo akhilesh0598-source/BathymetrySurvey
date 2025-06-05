@@ -1,3 +1,0 @@
-/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/build/CMakeFiles/PingProject.dir
-/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/build/CMakeFiles/edit_cache.dir
-/home/akhilesh/Desktop/Planys_Project_Bathymatric/bathymetric-core/EchoSounderDevice/build/CMakeFiles/rebuild_cache.dir

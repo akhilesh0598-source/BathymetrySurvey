@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES
     Main/main.cpp
+    EchoSounderDevice/PingSonar.hpp
     EchoSounderDevice/PingMain/serial-device.cpp
     EchoSounderDevice/PingMain/ping-port.h
     EchoSounderDevice/PingMain/ping-time.cpp
@@ -20,10 +21,10 @@ set(SOURCE_FILES
     Utility/Utility.cpp
 )
 
-find_package(Boost 1.86 EXACT REQUIRED COMPONENTS system)
+find_package(Boost 1.83 EXACT REQUIRED COMPONENTS system)
 
 if(NOT Boost_FOUND)
-  message(FATAL_ERROR "Boost 1.86 not found!")
+  message(FATAL_ERROR "Boost 1.83 not found!")
 endif()
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

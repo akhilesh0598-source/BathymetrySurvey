@@ -1,41 +1,35 @@
-#ifndef GPSDEVICE_HPP
-#define GPSDEVICE_HPP
+#pragma once
 
-#include <iostream>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/serial_port.hpp>
-#include <boost/asio/placeholders.hpp>
-#include <boost/thread/thread.hpp>
-#include <boost/bind/bind.hpp>
-#include <thread>
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
+#include <string>
+#include <vector>
+#include <mutex>
 
-#include "../../WebSocket/WebSocketResponseMessage/WebSocketResponseMessage.hpp"
-#include "../../Utility/Utility.hpp"
+class GPSDevice {
+public:
+    GPSDevice(std::string device_port, uint32_t baudrate);
+    bool Start();
+    void Stop();
 
-#define SERIAL_PORT_READ_BUF_SIZE 2048
-
-class GPSDevice
-{
 private:
+    static constexpr size_t SERIAL_PORT_READ_BUF_SIZE = 512;
     boost::asio::io_context io_context;
     boost::asio::serial_port serial_port;
     std::string device_port;
-    uint baudrate;
-    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE]={0};
+    uint32_t baudrate;
+
+    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE];
     std::string read_buf_str;
     boost::mutex mutex_;
+    std::thread io_thread;
 
-public:
-    GPSDevice(std::string device_port, uint baudrate);
-    bool Start();
-    void Stop();
     void async_read_some();
-
-private:
-    
-    void on_receive(const boost::system::error_code &ec, size_t bytes_transferred);
+    void on_receive(const boost::system::error_code& ec, size_t bytes_transferred);
+    void parseGPSLine(std::string& line);
     double dm_to_dd_latitude(std::string latitude);
     double dm_to_dd_longitude(std::string longitude);
-    void parseGPSLine(std::string &line);
+
+    std::vector<std::string> splitLine(const std::string& line);
 };
-#endif

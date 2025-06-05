@@ -6,7 +6,7 @@ double gpsLongitude = 0;
 int pingDeviceDistance = 0;
 int pingDeviceConfidence = 0;
 
-GPSDevice::GPSDevice(std::string device_port, uint baudrate)
+GPSDevice::GPSDevice(std::string device_port, uint32_t baudrate)
     : serial_port(io_context), device_port(device_port), baudrate(baudrate)
 {
     std::cout << "GPS device is initialized!!" << std::endl;
