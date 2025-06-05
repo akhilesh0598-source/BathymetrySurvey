@@ -1,21 +1,34 @@
 #include "GPSDevice.hpp"
 
+// Global variables for storing GPS data
 std::string gpsDateTime = "";
 double gpsLatitude = 0;
 double gpsLongitude = 0;
-int pingDeviceDistance = 0;
-int pingDeviceConfidence = 0;
+boost::mutex gps_mutex;
 
-GPSDevice::GPSDevice(std::string device_port, uint32_t baudrate)
-    : serial_port(io_context), device_port(device_port), baudrate(baudrate)
+// Constructor
+GPSDevice::GPSDevice(const std::string &device_port, uint32_t baudrate)
+    : serial_port(io_context), device_port(device_port), baudrate(baudrate),work_guard_(boost::asio::make_work_guard(io_context))
 {
-    std::cout << "GPS device is initialized!!" << std::endl;
+    std::cout << "GPS device initialized!" << std::endl;
 }
 
+// Start the GPS device communication
 bool GPSDevice::Start()
 {
     if (!serial_port.is_open())
+    {
         serial_port.open(device_port);
+        if (serial_port.is_open())
+        {
+            std::cout << "Serial port opened successfully\n";
+        }
+        else
+        {
+            std::cerr << "Failed to open serial port\n";
+            return false;
+        }
+    }
 
     serial_port.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
     serial_port.set_option(boost::asio::serial_port_base::character_size(8));
@@ -23,25 +36,54 @@ bool GPSDevice::Start()
     serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
     serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
 
-    std::thread t([&]()
-                  { io_context.run(); });
-    t.detach();
+    std::thread([this]()
+                {
+    std::cout << "io_context running thread started\n";
+    io_context.run();
+    std::cout << "io_context run() finished\n"; })
+        .detach();
+
     std::cout << "Reading started!" << std::endl;
     async_read_some();
     return true;
 }
 
+// Stop the GPS device communication
+void GPSDevice::Stop()
+{
+    boost::mutex::scoped_lock lock(mutex_);
+
+    if (serial_port.is_open())
+    {
+        serial_port.cancel();
+        serial_port.close();
+    }
+
+    work_guard_.reset();  // Allow io_context to stop when done
+    io_context.stop();
+    io_context.reset();
+    std::cout << "GPS device stopped." << std::endl;
+
+}
+
+// Begin asynchronous read
 void GPSDevice::async_read_some()
 {
     if (!serial_port.is_open())
         return;
-    serial_port.async_read_some(boost::asio::buffer(read_buf_raw_, SERIAL_PORT_READ_BUF_SIZE),
-                                boost::bind(&GPSDevice::on_receive, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+
+    serial_port.async_read_some(
+        boost::asio::buffer(read_buf_raw_, SERIAL_PORT_READ_BUF_SIZE),
+        boost::bind(&GPSDevice::on_receive, this,
+                    boost::asio::placeholders::error,
+                    boost::asio::placeholders::bytes_transferred));
 }
 
+// Callback for receiving data
 void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_transferred)
 {
-    boost::mutex::scoped_lock look(mutex_);
+    boost::mutex::scoped_lock lock(mutex_);
+
     if (!serial_port.is_open())
         return;
 
@@ -51,8 +93,10 @@ void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_tra
         async_read_some();
         return;
     }
+    std::cout << "on_receive called, bytes_transferred = " << bytes_transferred << std::endl;
+    std::cout << "Raw Buffer: " << std::string(read_buf_raw_, bytes_transferred) << std::endl;
 
-    for (int i = 0; i < bytes_transferred; i++)
+    for (size_t i = 0; i < bytes_transferred; ++i)
     {
         char c = read_buf_raw_[i];
         if (c == '\r' || c == '\n')
@@ -65,66 +109,81 @@ void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_tra
             read_buf_str += c;
         }
     }
-    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     async_read_some();
 }
 
-void GPSDevice::Stop()
-{
-    boost::mutex::scoped_lock look(mutex_);
-    if (serial_port.is_open())
-    {
-        serial_port.cancel();
-        serial_port.close();
-    }
-    io_context.stop();
-    io_context.reset();
-}
-
-double GPSDevice::dm_to_dd_latitude(std::string latitude) // DD means decimal degrees
-{
-    std::string first_part = latitude.substr(0, 2);
-    std::string second_part = latitude.substr(2, latitude.length() - 2);
-    double latitude_in_dd = std::stod(first_part) + (std::stod(second_part)) / 60;
-    return latitude_in_dd;
-}
-
-double GPSDevice::dm_to_dd_longitude(std::string longitude)
-{
-    std::string first_part = longitude.substr(0, 3);
-    std::string second_part = longitude.substr(3, longitude.length() - 3);
-    double longitude_in_dd = std::stod(first_part) + (std::stod(second_part)) / 60;
-    return longitude_in_dd;
-}
-
+// Parse a line from GPS and update global variables
 void GPSDevice::parseGPSLine(std::string &line)
 {
     try
     {
         std::cout << line << std::endl;
-        if (line.length() >= 6 && line.substr(0, 6) != "$GPGGA")
+
+        if (line.substr(0, 6) != "$GPGGA")
             return;
+
         std::vector<std::string> tokens = splitLine(line);
-        if (tokens.empty() && tokens.size() < 6)
-        {
+        if (tokens.size() < 6)
             return;
-        }
-        std::string utc_time = tokens[1].substr(0, 2) + ":" + tokens[1].substr(2, 2) + ":" + tokens[1].substr(4, 2);
 
+        // Parse UTC Time
+        std::string utc_time = tokens[1].substr(0, 2) + ":" +
+                               tokens[1].substr(2, 2) + ":" +
+                               tokens[1].substr(4, 2);
+
+        // Convert latitude
         double latitude = dm_to_dd_latitude(tokens[2]);
-        latitude = tokens[3] == "S" ? latitude * -1 : latitude;
+        if (tokens[3] == "S")
+            latitude *= -1;
 
+        // Convert longitude
         double longitude = dm_to_dd_longitude(tokens[4]);
-        longitude = tokens[5] == "W" ? longitude * -1 : longitude;
+        if (tokens[5] == "W")
+            longitude *= -1;
+
+        boost::mutex::scoped_lock lock(gps_mutex);
+        // Update global variables
         gpsDateTime = utc_time;
         gpsLatitude = latitude;
         gpsLongitude = longitude;
-        // std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        std::cout << "time: " << utc_time << "\n";
-        std::cout << "latitude: " << latitude << "\n";
-        std::cout << "longitude: " << longitude << "\n";
+
+        std::cout << "Parsed UTC time: " << utc_time << std::endl;
+        std::cout << "Parsed Latitude: " << latitude << std::endl;
+        std::cout << "Parsed Longitude: " << longitude << std::endl;
     }
-    catch (std::exception ex)
+    catch (const std::exception &ex)
     {
+        std::cerr << "Parsing error: " << ex.what() << std::endl;
     }
+}
+
+// Convert Latitude from Degrees Minutes (DM) to Decimal Degrees (DD)
+double GPSDevice::dm_to_dd_latitude(const std::string &latitude)
+{
+    std::string deg = latitude.substr(0, 2);
+    std::string min = latitude.substr(2);
+    return std::stod(deg) + std::stod(min) / 60.0;
+}
+
+// Convert Longitude from Degrees Minutes (DM) to Decimal Degrees (DD)
+double GPSDevice::dm_to_dd_longitude(const std::string &longitude)
+{
+    std::string deg = longitude.substr(0, 3);
+    std::string min = longitude.substr(3);
+    return std::stod(deg) + std::stod(min) / 60.0;
+}
+
+std::vector<std::string> GPSDevice::splitLine(const std::string &line)
+{
+    std::vector<std::string> result;
+    std::stringstream ss(line);
+    std::string token;
+
+    while (std::getline(ss, token, ','))
+    {
+        result.push_back(token);
+    }
+
+    return result;
 }

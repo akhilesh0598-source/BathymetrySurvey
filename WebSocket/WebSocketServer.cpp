@@ -90,10 +90,10 @@ void session::on_timer(boost::beast::error_code ec)
     // Prepare the data to send
     buffer_.clear();
 
-    std::string res = "{\"distance\":\"" + std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence) + "\",\"gpsDateTime\":\"" + gpsDateTime + "\",\"gpsLatitude\":\"" + std::to_string(gpsLatitude) + "\",\"gpsLongitude\":\"" + std::to_string(gpsLongitude) + "\"}";
-    auto prepared_buffer = buffer_.prepare(res.size());
-    boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
-    buffer_.commit(res.size());
+    // std::string res = "{\"distance\":\"" + std::to_string(pingDeviceDistance) + "\",\"confidence\" : \"" + std::to_string(pingDeviceConfidence) + "\",\"gpsDateTime\":\"" + gpsDateTime + "\",\"gpsLatitude\":\"" + std::to_string(gpsLatitude) + "\",\"gpsLongitude\":\"" + std::to_string(gpsLongitude) + "\"}";
+    // auto prepared_buffer = buffer_.prepare(res.size());
+    // boost::asio::buffer_copy(prepared_buffer, boost::asio::buffer(res));
+    // buffer_.commit(res.size());
 
     // Write asynchronously
     ws_.async_write(buffer_.data(), boost::beast::bind_front_handler(&session::on_write, shared_from_this()));

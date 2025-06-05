@@ -1,81 +1,62 @@
-#include<iostream>
-#include "../EchoSounderDevice/PingMain/EchoSounder.h"
-#include "../WebSocket/WebSocketServer.hpp"
+#include <iostream>
+#include <thread>
+#include <chrono>
+#include <csignal>
 #include "../GPSDevice/Device/GPSDevice.hpp"
-#include "../EchoSounderDevice/PingSonar.hpp"
-// GPSDevice gpsDevice("/tmp/ttyReadGPS", 19200);
+#include "../EchoSounderDevice/PingSonarDevice.hpp"
 
-// bool keepRunning=true;
-// bool isGPSDeviceRunning=false;
-// bool isPingDeviceRunning=false;
+std::atomic<bool> keepRunning{true};
+std::atomic<bool> signalHandled{false};
 
-// int readGPSDeviceData()
-// {
-//     try
-//     {
-//         gpsDevice.Start();
-//     }
-//     catch (const std::exception &ex)
-//     {
-//         std::cerr << "Error initializing GPS device: " << ex.what() << std::endl;
-//         return -1;
-//     }
-//     while (keepRunning)
-//         std::this_thread::sleep_for(std::chrono::seconds(1)); 
-//     gpsDevice.Stop();
-//     return 0;
-
-// }
-
-// int readPingDevicedata()
-// {
-//     initializePingDevice();
-//     while (true)
-//     {
-//         ping_message *response = ping1d.request(Ping1dId::DISTANCE, 1000);
-//         if (response == nullptr)
-//         {
-//             std::cerr << "Failed to receive distance data" << std::endl;
-//         }
-//         if (ping1d.distance_data.confidence >= 0)
-//         {
-//             pingDeviceDistance = ping1d.distance_data.distance;
-//             pingDeviceConfidence = static_cast<int>(ping1d.distance_data.confidence);
-//         }
-//         std::this_thread::sleep_for(std::chrono::milliseconds(90));
-//     }
-//     closePingDevice();
-// }
-
-// void initSigHandler()
-// {
-    
-// }
-
-int main(int argc, char *argv[])
-{
-    // std::thread PingDeviceThread(readPingDevicedata);
-    // std::thread GPSDeviceThread(readGPSDeviceData);
-    // auto const address = boost::asio::ip::make_address("127.0.0.1");
-    // auto const port = static_cast<unsigned short>(5001);
-    // auto const threads = 1;
-    // boost::asio::io_context ioc{threads};
-
-    // std::make_shared<listener>(ioc, boost::asio::ip::tcp::endpoint{address, port})->run();
-    
-    // ioc.run();
-    
-    // return 0;
-
-    SonarPingReader reader("/tmp/ttyReadPing", 115200); // Adjust for your PTY
-
-    reader.start([](uint32_t distance, uint16_t confidence) {
-        std::cout << "Received Distance: " << distance << " mm, Confidence: " << confidence << "%" << std::endl;
-    });
-
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-    reader.stop();
-    return 0;
+void signalHandler(int signum) {
+    if (!signalHandled.exchange(true)) {  // Only execute once
+        std::cout << "\nInterrupt signal (" << signum << ") received. Exiting...\n";
+        keepRunning = false;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
+int main() {
+    std::string gpsPort = "/tmp/ttyReadGPS";
+    std::string sonarPort = "/tmp/ttyReadPing";
 
+    // Register signal handler
+    std::signal(SIGINT, signalHandler);
+
+    GPSDevice gps(gpsPort, 9600);
+    PingSonarDevice sonar(sonarPort, 115200);
+
+    if (!gps.Start()) {
+        std::cerr << "Failed to start GPS device.\n";
+        return 1;
+    }
+
+    if (!sonar.Start()) {
+        std::cerr << "Failed to start Sonar device.\n";
+        return 1;
+    }
+
+    while (keepRunning) {
+        {
+            boost::mutex::scoped_lock lock(gps_mutex);
+            std::cout << "\n[GPS] Time: " << gpsDateTime
+                      << ", Latitude: " << gpsLatitude
+                      << ", Longitude: " << gpsLongitude << std::endl;
+        }
+
+        {
+            boost::mutex::scoped_lock lock(sonar_mutex);
+            std::cout << "[SONAR] Distance: " << sonarDistance
+                      << " mm, Confidence: " << sonarConfidence << "%" << std::endl;
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    // Graceful shutdown
+    gps.Stop();
+    sonar.Stop();
+
+    std::cout << "Devices stopped. Program exited cleanly.\n";
+    return 0;
+}

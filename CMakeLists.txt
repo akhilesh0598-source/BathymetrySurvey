@@ -7,18 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES
     Main/main.cpp
-    EchoSounderDevice/PingSonar.hpp
-    EchoSounderDevice/PingMain/serial-device.cpp
-    EchoSounderDevice/PingMain/ping-port.h
-    EchoSounderDevice/PingMain/ping-time.cpp
-    EchoSounderDevice/device/ping-device.cpp
-    EchoSounderDevice/device/ping-device-ping1d.cpp
-    EchoSounderDevice/message/ping-message-all.h
-    EchoSounderDevice/message/ping-message-common.h
-    EchoSounderDevice/message/ping-message-bluebps.h
+    EchoSounderDevice/PingSonarDevice.cpp
     WebSocket/WebSocketServer.cpp
     GPSDevice/Device/GPSDevice.cpp
-    Utility/Utility.cpp
 )
 
 find_package(Boost 1.83 EXACT REQUIRED COMPONENTS system)

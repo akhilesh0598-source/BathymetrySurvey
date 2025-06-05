@@ -83,66 +83,24 @@ CMakeFiles/Main.dir/Main/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/Main/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/Main/main.cpp -o CMakeFiles/Main.dir/Main/main.cpp.s
 
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o: CMakeFiles/Main.dir/flags.make
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/serial-device.cpp
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o -MF CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o.d -o CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/serial-device.cpp
+CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o: CMakeFiles/Main.dir/flags.make
+CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingSonarDevice.cpp
+CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o -MF CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o.d -o CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingSonarDevice.cpp
 
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/serial-device.cpp > CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.i
+CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingSonarDevice.cpp > CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.i
 
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/serial-device.cpp -o CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.s
-
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o: CMakeFiles/Main.dir/flags.make
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o -MF CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o.d -o CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp
-
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp > CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.i
-
-CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingMain/ping-time.cpp -o CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.s
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o: CMakeFiles/Main.dir/flags.make
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device.cpp
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o -MF CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o.d -o CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device.cpp
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device.cpp > CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.i
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device.cpp -o CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.s
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o: CMakeFiles/Main.dir/flags.make
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device-ping1d.cpp
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o -MF CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o.d -o CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device-ping1d.cpp
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device-ping1d.cpp > CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.i
-
-CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/device/ping-device-ping1d.cpp -o CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.s
+CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/EchoSounderDevice/PingSonarDevice.cpp -o CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.s
 
 CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o: CMakeFiles/Main.dir/flags.make
 CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/WebSocket/WebSocketServer.cpp
 CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o -MF CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o.d -o CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/WebSocket/WebSocketServer.cpp
 
 CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.i: cmake_force
@@ -156,7 +114,7 @@ CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.s: cmake_force
 CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o: CMakeFiles/Main.dir/flags.make
 CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/GPSDevice/Device/GPSDevice.cpp
 CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o -MF CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o.d -o CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/GPSDevice/Device/GPSDevice.cpp
 
 CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.i: cmake_force
@@ -167,46 +125,24 @@ CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/GPSDevice/Device/GPSDevice.cpp -o CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.s
 
-CMakeFiles/Main.dir/Utility/Utility.cpp.o: CMakeFiles/Main.dir/flags.make
-CMakeFiles/Main.dir/Utility/Utility.cpp.o: /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/Utility/Utility.cpp
-CMakeFiles/Main.dir/Utility/Utility.cpp.o: CMakeFiles/Main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/Main.dir/Utility/Utility.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Main.dir/Utility/Utility.cpp.o -MF CMakeFiles/Main.dir/Utility/Utility.cpp.o.d -o CMakeFiles/Main.dir/Utility/Utility.cpp.o -c /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/Utility/Utility.cpp
-
-CMakeFiles/Main.dir/Utility/Utility.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Main.dir/Utility/Utility.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/Utility/Utility.cpp > CMakeFiles/Main.dir/Utility/Utility.cpp.i
-
-CMakeFiles/Main.dir/Utility/Utility.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Main.dir/Utility/Utility.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/Utility/Utility.cpp -o CMakeFiles/Main.dir/Utility/Utility.cpp.s
-
 # Object files for target Main
 Main_OBJECTS = \
 "CMakeFiles/Main.dir/Main/main.cpp.o" \
-"CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o" \
-"CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o" \
-"CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o" \
-"CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o" \
+"CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o" \
 "CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o" \
-"CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o" \
-"CMakeFiles/Main.dir/Utility/Utility.cpp.o"
+"CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o"
 
 # External object files for target Main
 Main_EXTERNAL_OBJECTS =
 
 Main: CMakeFiles/Main.dir/Main/main.cpp.o
-Main: CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o
-Main: CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o
-Main: CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o
-Main: CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o
+Main: CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o
 Main: CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o
 Main: CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o
-Main: CMakeFiles/Main.dir/Utility/Utility.cpp.o
 Main: CMakeFiles/Main.dir/build.make
 Main: /usr/lib/x86_64-linux-gnu/libboost_system.so
 Main: CMakeFiles/Main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable Main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable Main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

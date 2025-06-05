@@ -129,101 +129,29 @@ Main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/build
 .PHONY : Main/fast
 
-EchoSounderDevice/PingMain/ping-time.o: EchoSounderDevice/PingMain/ping-time.cpp.o
-.PHONY : EchoSounderDevice/PingMain/ping-time.o
+EchoSounderDevice/PingSonarDevice.o: EchoSounderDevice/PingSonarDevice.cpp.o
+.PHONY : EchoSounderDevice/PingSonarDevice.o
 
 # target to build an object file
-EchoSounderDevice/PingMain/ping-time.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.o
-.PHONY : EchoSounderDevice/PingMain/ping-time.cpp.o
+EchoSounderDevice/PingSonarDevice.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o
+.PHONY : EchoSounderDevice/PingSonarDevice.cpp.o
 
-EchoSounderDevice/PingMain/ping-time.i: EchoSounderDevice/PingMain/ping-time.cpp.i
-.PHONY : EchoSounderDevice/PingMain/ping-time.i
-
-# target to preprocess a source file
-EchoSounderDevice/PingMain/ping-time.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.i
-.PHONY : EchoSounderDevice/PingMain/ping-time.cpp.i
-
-EchoSounderDevice/PingMain/ping-time.s: EchoSounderDevice/PingMain/ping-time.cpp.s
-.PHONY : EchoSounderDevice/PingMain/ping-time.s
-
-# target to generate assembly for a file
-EchoSounderDevice/PingMain/ping-time.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/ping-time.cpp.s
-.PHONY : EchoSounderDevice/PingMain/ping-time.cpp.s
-
-EchoSounderDevice/PingMain/serial-device.o: EchoSounderDevice/PingMain/serial-device.cpp.o
-.PHONY : EchoSounderDevice/PingMain/serial-device.o
-
-# target to build an object file
-EchoSounderDevice/PingMain/serial-device.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.o
-.PHONY : EchoSounderDevice/PingMain/serial-device.cpp.o
-
-EchoSounderDevice/PingMain/serial-device.i: EchoSounderDevice/PingMain/serial-device.cpp.i
-.PHONY : EchoSounderDevice/PingMain/serial-device.i
+EchoSounderDevice/PingSonarDevice.i: EchoSounderDevice/PingSonarDevice.cpp.i
+.PHONY : EchoSounderDevice/PingSonarDevice.i
 
 # target to preprocess a source file
-EchoSounderDevice/PingMain/serial-device.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.i
-.PHONY : EchoSounderDevice/PingMain/serial-device.cpp.i
+EchoSounderDevice/PingSonarDevice.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.i
+.PHONY : EchoSounderDevice/PingSonarDevice.cpp.i
 
-EchoSounderDevice/PingMain/serial-device.s: EchoSounderDevice/PingMain/serial-device.cpp.s
-.PHONY : EchoSounderDevice/PingMain/serial-device.s
-
-# target to generate assembly for a file
-EchoSounderDevice/PingMain/serial-device.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingMain/serial-device.cpp.s
-.PHONY : EchoSounderDevice/PingMain/serial-device.cpp.s
-
-EchoSounderDevice/device/ping-device-ping1d.o: EchoSounderDevice/device/ping-device-ping1d.cpp.o
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.o
-
-# target to build an object file
-EchoSounderDevice/device/ping-device-ping1d.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.o
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.cpp.o
-
-EchoSounderDevice/device/ping-device-ping1d.i: EchoSounderDevice/device/ping-device-ping1d.cpp.i
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.i
-
-# target to preprocess a source file
-EchoSounderDevice/device/ping-device-ping1d.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.i
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.cpp.i
-
-EchoSounderDevice/device/ping-device-ping1d.s: EchoSounderDevice/device/ping-device-ping1d.cpp.s
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.s
+EchoSounderDevice/PingSonarDevice.s: EchoSounderDevice/PingSonarDevice.cpp.s
+.PHONY : EchoSounderDevice/PingSonarDevice.s
 
 # target to generate assembly for a file
-EchoSounderDevice/device/ping-device-ping1d.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device-ping1d.cpp.s
-.PHONY : EchoSounderDevice/device/ping-device-ping1d.cpp.s
-
-EchoSounderDevice/device/ping-device.o: EchoSounderDevice/device/ping-device.cpp.o
-.PHONY : EchoSounderDevice/device/ping-device.o
-
-# target to build an object file
-EchoSounderDevice/device/ping-device.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.o
-.PHONY : EchoSounderDevice/device/ping-device.cpp.o
-
-EchoSounderDevice/device/ping-device.i: EchoSounderDevice/device/ping-device.cpp.i
-.PHONY : EchoSounderDevice/device/ping-device.i
-
-# target to preprocess a source file
-EchoSounderDevice/device/ping-device.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.i
-.PHONY : EchoSounderDevice/device/ping-device.cpp.i
-
-EchoSounderDevice/device/ping-device.s: EchoSounderDevice/device/ping-device.cpp.s
-.PHONY : EchoSounderDevice/device/ping-device.s
-
-# target to generate assembly for a file
-EchoSounderDevice/device/ping-device.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/device/ping-device.cpp.s
-.PHONY : EchoSounderDevice/device/ping-device.cpp.s
+EchoSounderDevice/PingSonarDevice.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.s
+.PHONY : EchoSounderDevice/PingSonarDevice.cpp.s
 
 GPSDevice/Device/GPSDevice.o: GPSDevice/Device/GPSDevice.cpp.o
 .PHONY : GPSDevice/Device/GPSDevice.o
@@ -273,30 +201,6 @@ Main/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
 
-Utility/Utility.o: Utility/Utility.cpp.o
-.PHONY : Utility/Utility.o
-
-# target to build an object file
-Utility/Utility.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.o
-.PHONY : Utility/Utility.cpp.o
-
-Utility/Utility.i: Utility/Utility.cpp.i
-.PHONY : Utility/Utility.i
-
-# target to preprocess a source file
-Utility/Utility.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.i
-.PHONY : Utility/Utility.cpp.i
-
-Utility/Utility.s: Utility/Utility.cpp.s
-.PHONY : Utility/Utility.s
-
-# target to generate assembly for a file
-Utility/Utility.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/Utility/Utility.cpp.s
-.PHONY : Utility/Utility.cpp.s
-
 WebSocket/WebSocketServer.o: WebSocket/WebSocketServer.cpp.o
 .PHONY : WebSocket/WebSocketServer.o
 
@@ -330,27 +234,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Main"
-	@echo "... EchoSounderDevice/PingMain/ping-time.o"
-	@echo "... EchoSounderDevice/PingMain/ping-time.i"
-	@echo "... EchoSounderDevice/PingMain/ping-time.s"
-	@echo "... EchoSounderDevice/PingMain/serial-device.o"
-	@echo "... EchoSounderDevice/PingMain/serial-device.i"
-	@echo "... EchoSounderDevice/PingMain/serial-device.s"
-	@echo "... EchoSounderDevice/device/ping-device-ping1d.o"
-	@echo "... EchoSounderDevice/device/ping-device-ping1d.i"
-	@echo "... EchoSounderDevice/device/ping-device-ping1d.s"
-	@echo "... EchoSounderDevice/device/ping-device.o"
-	@echo "... EchoSounderDevice/device/ping-device.i"
-	@echo "... EchoSounderDevice/device/ping-device.s"
+	@echo "... EchoSounderDevice/PingSonarDevice.o"
+	@echo "... EchoSounderDevice/PingSonarDevice.i"
+	@echo "... EchoSounderDevice/PingSonarDevice.s"
 	@echo "... GPSDevice/Device/GPSDevice.o"
 	@echo "... GPSDevice/Device/GPSDevice.i"
 	@echo "... GPSDevice/Device/GPSDevice.s"
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
-	@echo "... Utility/Utility.o"
-	@echo "... Utility/Utility.i"
-	@echo "... Utility/Utility.s"
 	@echo "... WebSocket/WebSocketServer.o"
 	@echo "... WebSocket/WebSocketServer.i"
 	@echo "... WebSocket/WebSocketServer.s"
