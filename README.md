@@ -49,7 +49,9 @@ Clone and compile the backend:
 
 ```bash
 git clone https://github.com/akhilesh0598-source/BathymetrySurvey.git
-cd BathymetrySurvey/backend
+cd BathymetrySurvey
+git submodule update --init --recursive
+cd backend
 mkdir build && cd build
 cmake ..
 make -j4
