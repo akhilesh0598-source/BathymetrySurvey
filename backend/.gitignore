@@ -1,0 +1,42 @@
+# === C++ Compiled Files ===
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.dll
+*.dylib
+
+# === Build Directories ===
+build/
+bin/
+Debug/
+Release/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# === IDE / Editor Files ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# === Logs ===
+*.log
+
+# === Coverage / Test Files ===
+*.gcno
+*.gcda
+*.gcov
+
+# === Boost / spdlog specific ===
+# (Note: They don’t generate anything specific unless customized, but build artifacts are covered above)
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db

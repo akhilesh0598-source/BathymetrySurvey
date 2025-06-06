@@ -132,4 +132,5 @@ npm start
 ## 4. Author
 
 **Akhilesh Chaurasiya**
+
 Feel free to open issues or contribute to this project on GitHub.
