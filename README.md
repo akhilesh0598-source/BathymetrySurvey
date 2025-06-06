@@ -1,90 +1,90 @@
+# Bathymetry Survey
 
-# Bathymetric-Core
+## 1. Project Overview
 
-## 1. Features
+This repository hosts the full-stack **Bathymetry Survey** system, consisting of two main components:
 
-### 1.1 Real-time Sensor Integration
+* **Backend:**
+  A C++17 application for real-time sensor data acquisition, WebSocket and HTTP communication, CSV logging, and mock device simulation.
 
-- Supports Ping Sonar and GPS devices for continuous data acquisition.
-
-### 1.2 Asynchronous Data Processing
-
-- Non-blocking serial communication using Boost Asio for smooth, real-time reads.
-
-### 1.3 WebSocket Server
-
-- Streams live sensor data to connected clients for real-time monitoring.
-
-### 1.4 HTTP Server
-
-- Provides endpoints for remote commands (e.g., start/stop logging).
-
-### 1.5 Data Logging
-
-- Background CSV logger that records sensor data with timestamps.
-
-### 1.6 Graceful Shutdown
-
-- Handles OS signals (e.g., SIGINT) for clean application termination.
-
-### 1.7 Mock Device Support
-
-- Easily create virtual serial devices for development and testing without hardware.
-
-### 1.8 Structured Project Architecture
-
-- Modular folder structure for scalability and maintainability.
+* **Frontend:**
+  A React.js application for visualizing and interacting with live sensor data.
 
 ---
 
-## 2. Installation & Setup Guide
+## 2. System Setup
 
-### 2.1 Prerequisites
+### 2.1 Backend
 
-- **Operating System:** Linux (Ubuntu preferred)
-- **Build Tools:**
-  - C++17 compatible compiler (e.g., `g++`)
-  - CMake (version 3.10+)
-- **Libraries:**
-  - C/C++ Standard Library
-  - Boost (system, asio, beast)
-  - `spdlog` (included via external directory)
-- **Utilities:**
-  - `socat` for virtual serial ports
-- **Python 3** for running mock device scripts
+#### 2.1.1 Features
 
-### 2.2 Clone the Repository
+1. Real-time data acquisition from Ping Sonar and GPS devices
+2. Asynchronous serial communication with Boost Asio
+3. WebSocket server for live data streaming
+4. HTTP server for control commands (e.g., start/stop logging)
+5. Background CSV data logging with timestamps
+6. Graceful termination using OS signal handling
+7. Support for mock devices using virtual serial ports
+8. Clean, modular, and scalable C++ codebase
+
+#### 2.1.2 Prerequisites
+
+Install required dependencies:
 
 ```bash
-git clone https://github.com/yourusername/bathymetric-core.git
-cd bathymetric-core/backend
+sudo apt update
+sudo apt install -y cmake g++ python3 socat libboost-all-dev
 ```
 
-### 2.3 Build the Project
+Clone `spdlog` from GitHub:
 
 ```bash
-mkdir build
-cd build
+cd BathymetrySurvey/backend/external
+git clone https://github.com/gabime/spdlog.git
+```
+
+#### 2.1.3 Build & Run Backend
+
+Clone and compile the backend:
+
+```bash
+git clone https://github.com/akhilesh0598-source/BathymetrySurvey.git
+cd BathymetrySurvey/backend
+mkdir build && cd build
 cmake ..
 make -j4
 ```
 
-### 2.4 Setup Virtual Serial Devices
+#### 2.1.4 Setup Mock Devices
+
+Create virtual serial ports:
+
+**Terminal 1:**
 
 ```bash
 cd ../MockDevice/Command
-./command.sh
+sh command.sh
 ```
 
-### 2.5 Run Mock Data Scripts
+Run mock data scripts:
+
+**Terminal 2:**
 
 ```bash
 cd ../GenerateMockData
 python3 GPSDeviceMockData.py
+```
+
+**Terminal 3:**
+
+```bash
+cd ../GenerateMockData
 python3 PingDeviceMockData.py
 ```
 
-### 2.6 Run the Application
+#### 2.1.5 Launch Backend
+
+**Terminal 4:**
 
 ```bash
 cd ../../build
@@ -93,48 +93,43 @@ cd ../../build
 
 ---
 
-## 3. Folder Structure Overview
+### 2.2 Frontend
+
+#### 2.2.1 Features
+
+1. Real-time visualization of sonar and GPS data
+2. WebSocket-based live updates
+3. Responsive and intuitive UI
+
+#### 2.2.2 Setup Frontend
+
+Navigate to the frontend folder and install dependencies:
+
+**Terminal 5:**
 
 ```bash
-backend/
-├── CMakeLists.txt
-├── Main/
-│   └── main.cpp
-├── EchoSounderDevice/
-│   └── PingSonarDevice.cpp/hpp
-├── GPSDevice/
-│   └── GPSDevice.cpp/hpp
-├── WebSocket/
-│   └── WebSocketServer.cpp/hpp
-├── HttpServer/
-│   └── HttpServer.cpp/hpp
-├── LogDeviceData/
-│   └── LogDevicesData.cpp/hpp
-├── GlobalVariables/
-│   └── GlobalDevicesData.cpp/hpp
-├── MockDevice/
-│   ├── Command/
-│   │   └── command.sh
-│   └── GenerateMockData/
-│       ├── GPSDeviceMockData.py
-│       └── PingDeviceMockData.py
-└── external/
-    └── spdlog/
+cd ../../frontend
+npm install
+```
+
+Start the development server:
+
+```bash
+npm start
 ```
 
 ---
 
-## 4. ⚡ Coming Soon
+## 3. ⚡ Coming Soon
 
-- REST API endpoints for historical data
-- Web dashboard for live plotting
-- Unit tests using Catch2
-- Dockerized deployment
+* REST APIs for historical data access
+* Web dashboard for advanced plotting and controls
+* Unit testing via Catch2 framework
+* Dockerized deployment setup
 
 ---
 
-## 5. Author
+## 4. Author
 
 **Akhilesh Chaurasiya**
-
-Feel free to contribute or raise issues on GitHub!
+Feel free to open issues or contribute to this project on GitHub.
