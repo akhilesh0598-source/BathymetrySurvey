@@ -1,3 +1,0 @@
-/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles/Main.dir
-/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/akhil/Desktop/Planys_Project/bathymetric-core/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sensor Data Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .json-output {
+            background: #eee;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .value {
+            color: #007BFF;
+        }
+        .row {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Live Sensor Data</h1>
+        <div class="json-output" id="raw"></div>
+
+        <div class="row"><span class="label">Sonar Distance:</span> <span class="value" id="distance">-</span> meters</div>
+        <div class="row"><span class="label">Sonar Confidence:</span> <span class="value" id="confidence">-</span> %</div>
+        <div class="row"><span class="label">GPS Latitude:</span> <span class="value" id="latitude">-</span></div>
+        <div class="row"><span class="label">GPS Longitude:</span> <span class="value" id="longitude">-</span></div>
+        <div class="row"><span class="label">GPS DateTime:</span> <span class="value" id="gpsDateTime">-</span></div>
+    </div>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:9002");
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket!");
+        };
+
+        ws.onmessage = (event) => {
+            const jsonData = event.data;
+            document.getElementById("raw").textContent = jsonData;
+
+            try {
+                const data = JSON.parse(jsonData);
+                document.getElementById("distance").textContent = data.distance ?? "-";
+                document.getElementById("confidence").textContent = data.confidence ?? "-";
+                document.getElementById("latitude").textContent = data.latitude ?? "-";
+                document.getElementById("longitude").textContent = data.longitude ?? "-";
+                document.getElementById("gpsDateTime").textContent = data.gpsDateTime ?? "-";
+            } catch (e) {
+                console.error("Invalid JSON received:", e);
+            }
+        };
+    </script>
+</body>
+</html>

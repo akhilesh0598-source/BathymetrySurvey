@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/Main.dir/Main/main.cpp.o CMakeFiles/Main.dir/EchoSounderDevice/PingSonarDevice.cpp.o CMakeFiles/Main.dir/WebSocket/WebSocketServer.cpp.o CMakeFiles/Main.dir/GPSDevice/Device/GPSDevice.cpp.o -o Main  /usr/lib/x86_64-linux-gnu/libboost_system.so 
