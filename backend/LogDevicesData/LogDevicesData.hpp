@@ -1,11 +1,11 @@
 #pragma once
 
-#include<iostream>
+#include <unordered_map>
 #include <string>
+#include <memory>
+#include <mutex>
 #include <thread>
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
-
+#include <atomic>
 
 #include "../GlobalVariables/GlobalDevicesData.hpp"
 
@@ -16,12 +16,31 @@ public:
 
     void start();
     void stop();
+    const std::string& getFilePath() const;
 
 private:
     void run();
 
-    std::string logFilePath;
-    std::thread logThread;
-    std::atomic<bool> stopLogging;
+    std::string logFilePath_;
+    std::atomic<bool> terminateThread_;
+    std::atomic<bool> loggingActive_;
+    std::thread logThread_;
 };
 
+class LogManager {
+public:
+    LogManager();
+    ~LogManager();
+
+    void startLogging(const std::string& clientId);
+    void stopLogging(const std::string& clientId);
+    std::string getLastLogFilePath(const std::string& clientId);
+
+private:
+    std::string createNewLogFilePath(const std::string& clientId);
+    std::string getLogsDir() const;
+
+    std::unordered_map<std::string, std::unique_ptr<LogData>> activeLoggers_;
+    std::unordered_map<std::string, std::string> lastLogFilePathMap_;
+    std::mutex loggerMutex_;
+};

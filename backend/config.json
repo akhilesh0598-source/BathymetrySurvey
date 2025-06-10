@@ -1,0 +1,9 @@
+{
+    "WebSocketPort":9002,
+    "HttpServerPort":8080,
+    "PingDevicePort":"/tmp/ttyReadPing",
+    "PingDeviceBaudRate":9600,
+    "GPSDevicePort":"/tmp/ttyReadGPS",
+    "GPSDeviceBaudRate":115200,
+    "LogFilePath":"LogFilePath/device_log.csv"
+}

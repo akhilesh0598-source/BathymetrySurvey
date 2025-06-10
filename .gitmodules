@@ -1,3 +1,5 @@
 [submodule "backend/external/spdlog"]
 	path = backend/external/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "backend/external/json"]
+	path = backend/external/json
