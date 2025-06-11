@@ -21,7 +21,7 @@ class HttpSession : public std::enable_shared_from_this<HttpSession> {
 public:
     explicit HttpSession(tcp::socket socket);
     void start();
-
+    
 private:
     void do_read();
     void on_read(boost::beast::error_code ec, std::size_t bytes_transferred);
@@ -42,6 +42,7 @@ class HttpServer {
 public:
     HttpServer(boost::asio::io_context& ioc, unsigned short port);
     void start();
+    void stop();
 
 private:
     void do_accept();

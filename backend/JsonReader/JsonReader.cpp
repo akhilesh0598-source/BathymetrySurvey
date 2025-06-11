@@ -31,6 +31,9 @@ template bool JsonReader::get<bool>(const std::string& key) const;
 template double JsonReader::get<double>(const std::string& key) const;
 
 void JsonReader::setConfig() {
+
+    std::cout <<"File Name: "<<__FILE__<<"Reading started for json file.\n";
+    
     if (!read()) {
         throw std::runtime_error("Failed to read config");
     }
@@ -46,5 +49,6 @@ void JsonReader::setConfig() {
     } catch (const std::exception& e) {
         throw std::runtime_error(std::string("Error parsing config JSON: ") + e.what());
     }
+    std::cout <<"File Name: "<<__FILE__<<"Json file has beed read successfully\n";
 }
 

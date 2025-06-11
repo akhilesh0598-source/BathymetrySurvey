@@ -2,9 +2,9 @@
 
 // Constructor
 GPSDevice::GPSDevice(const std::string &device_port, uint32_t baudrate)
-    : serial_port(io_context), device_port(device_port), baudrate(baudrate),work_guard_(boost::asio::make_work_guard(io_context))
+    : serial_port(io_context), device_port(device_port),
+      baudrate(baudrate), work_guard_(boost::asio::make_work_guard(io_context)), stop_flag_(false)
 {
-    std::cout << "GPS device initialized!" << std::endl;
 }
 
 // Start the GPS device communication
@@ -13,11 +13,7 @@ bool GPSDevice::Start()
     if (!serial_port.is_open())
     {
         serial_port.open(device_port);
-        if (serial_port.is_open())
-        {
-            std::cout << "Serial port opened successfully\n";
-        }
-        else
+        if (!serial_port.is_open())
         {
             std::cerr << "Failed to open serial port\n";
             return false;
@@ -30,21 +26,26 @@ bool GPSDevice::Start()
     serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
     serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
 
-    io_thread_=std::thread([this]()
-                {
-    std::cout << "io_context running thread started\n";
-    io_context.run();
-    std::cout << "io_context run() finished\n"; });
-
-    std::cout << "Reading started!" << std::endl;
     async_read_some();
+
+    io_thread_ = std::thread([this]()
+                             {
+        std::cout << "io_context running thread started for GPS Device\n";
+        io_context.run();
+        std::cout << "io_context run() finished for GPS Device\n"; });
+
+    std::cout << "Reading started for GPS Device!" << std::endl;
+
     return true;
 }
 
 // Stop the GPS device communication
 void GPSDevice::Stop()
 {
-    boost::mutex::scoped_lock lock(mutex_);
+    {
+        boost::mutex::scoped_lock lock(mutex_);
+        stop_flag_ = true;
+    }
 
     if (serial_port.is_open())
     {
@@ -52,15 +53,16 @@ void GPSDevice::Stop()
         serial_port.close();
     }
 
-    work_guard_.reset();  // Allow io_context to stop when done
+    work_guard_.reset();
     io_context.stop();
-    if(io_thread_.joinable())
+
+    if (io_thread_.joinable())
     {
         io_thread_.join();
     }
     io_context.reset();
-    std::cout << "GPS device stopped." << std::endl;
-
+    
+    std::cout << "GPS device stopped reading." << std::endl;
 }
 
 // Begin asynchronous read
@@ -81,13 +83,18 @@ void GPSDevice::on_receive(const boost::system::error_code &ec, size_t bytes_tra
 {
     boost::mutex::scoped_lock lock(mutex_);
 
-    if (!serial_port.is_open())
+    if (!serial_port.is_open()|| stop_flag_)
         return;
 
-    if (ec)
+     if (ec)
     {
-        std::cerr << "Error: " << ec.what() << std::endl;
-        async_read_some();
+        if (!stop_flag_)
+        {
+            if (ec == boost::asio::error::eof)
+                std::cerr << "GPS read stopped (EOF).\n";
+            else
+                std::cerr << "GPS read error: " << ec.message() << std::endl;
+        }
         return;
     }
     for (size_t i = 0; i < bytes_transferred; ++i)

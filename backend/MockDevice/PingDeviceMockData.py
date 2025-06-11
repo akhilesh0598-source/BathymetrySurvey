@@ -127,7 +127,7 @@ if __name__ == "__main__":
             try:
                 ser.write(message)
                 # print(f"Sent: {message.hex()} (Distance: {distance} mm, Confidence: {confidence}%)")
-                print(f"Sent Ping {ping_number}: Distance {distance} mm, Confidence {confidence}%")
+                # print(f"Sent Ping {ping_number}: Distance {distance} mm, Confidence {confidence}%")
                 ping_count += 1
             except serial.SerialTimeoutException:
                 print("Write timeout occurred, could not send message.")
@@ -135,7 +135,7 @@ if __name__ == "__main__":
                 print(f"Error writing to serial port: {e}")
                 break
 
-            time.sleep(0.1) # Send a message every 100ms
+            time.sleep(0.5) # Send a message every 500ms
 
     except serial.SerialException as e:
         print(f"Failed to open serial port {SERIAL_PORT}: {e}")

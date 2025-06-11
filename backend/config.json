@@ -1,5 +1,5 @@
 {
-    "WebSocketPort":9002,
+    "WebSocketPort":9090,
     "HttpServerPort":8080,
     "PingDevicePort":"/tmp/ttyReadPing",
     "PingDeviceBaudRate":9600,

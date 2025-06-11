@@ -95,11 +95,15 @@ WebSocketServer::WebSocketServer(asio::io_context &ioc, uint16_t port)
 
 void WebSocketServer::start()
 {
+    std::cout << "WebSocket server is listening on port " 
+              << acceptor_.local_endpoint().port() << std::endl;
+
     acceptor_.async_accept(socket_, [this](beast::error_code ec)
                            {
                                if (!ec)
                                {
-                                   std::make_shared<WebSocketSession>(std::move(socket_))->start();
+                                    std::cout << "Accepted new WebSocket connection\n";
+                                    std::make_shared<WebSocketSession>(std::move(socket_))->start();
                                }
                                else
                                {
@@ -108,3 +112,23 @@ void WebSocketServer::start()
                                start(); // continue accepting
                            });
 }
+
+void WebSocketServer::stop()
+{
+    boost::system::error_code ec;
+
+    // Cancel any pending async_accept operations (optional but good practice)
+    acceptor_.cancel(ec);
+    if (ec) {
+        std::cerr << "WebSocketServer cancel error: " << ec.message() << "\n";
+    }
+
+    // Close the acceptor to stop new connections
+    acceptor_.close(ec);
+    if (ec) {
+        std::cerr << "WebSocketServer close error: " << ec.message() << "\n";
+    }
+
+    std::cout << "WebSocket server stopped.\n";
+}
+

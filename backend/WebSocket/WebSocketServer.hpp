@@ -32,6 +32,7 @@ class WebSocketServer {
 public:
     WebSocketServer(boost::asio::io_context& ioc, uint16_t port);
     void start();
+    void stop();
 
 private:
     boost::asio::ip::tcp::acceptor acceptor_;

@@ -39,7 +39,7 @@ def calculate_checksum(nmea_str):
     return f"{cksum:02X}"
 
 def main():
-    print(f"Sending simulated GPS data to {gps_device_path}")
+    #print(f"Sending simulated GPS data to {gps_device_path}")
 
     lat = start_lat
     lon = start_lon
@@ -49,7 +49,7 @@ def main():
         try:
             with open(gps_device_path, "w") as f:
                 f.write(sentence + "\r\n")
-            print("Sent:", sentence)
+            # print("Sent:", sentence)
         except IOError as e:
             print(f"Error writing to {gps_device_path}: {e}")
 

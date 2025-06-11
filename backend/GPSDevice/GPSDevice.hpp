@@ -26,6 +26,7 @@ private:
     std::string device_port;
     uint32_t baudrate;
     boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_guard_;
+    std::atomic<bool> stop_flag_;
 
     char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE];
     std::string read_buf_str;

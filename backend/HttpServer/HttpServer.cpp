@@ -190,8 +190,32 @@ HttpServer::HttpServer(boost::asio::io_context& ioc, unsigned short port)
 }
 
 void HttpServer::start() {
+    try {
+        std::cout << "HTTP server is listening on port " 
+                  << acceptor_.local_endpoint().port() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to get local endpoint: " << e.what() << std::endl;
+    }
     do_accept();
 }
+
+void HttpServer::stop() {
+    boost::system::error_code ec;
+
+    // Stop accepting new connections
+    acceptor_.cancel(ec);  // Optional: cancels pending async_accept
+    if (ec) {
+        std::cerr << "Error canceling acceptor: " << ec.message() << "\n";
+    }
+
+    acceptor_.close(ec);   // Required: closes the acceptor
+    if (ec) {
+        std::cerr << "Error closing acceptor: " << ec.message() << "\n";
+    }
+
+    std::cout << "HTTP server stopped.\n";
+}
+
 
 void HttpServer::do_accept() {
     acceptor_.async_accept(
@@ -202,9 +226,12 @@ void HttpServer::do_accept() {
 
 void HttpServer::on_accept(boost::beast::error_code ec, tcp::socket socket) {
     if (!ec) {
+        std::cout << "Accepted HTTP connection from " 
+                  << socket.remote_endpoint() << std::endl;
+
         std::make_shared<HttpSession>(std::move(socket))->start();
     } else {
-        std::cerr << "Accept error: " << ec.message() << "\n";
+        std::cerr << "Not Accepted error: " << ec.message() << "\n";
     }
     do_accept();
 }
