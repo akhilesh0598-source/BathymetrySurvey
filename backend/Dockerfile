@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dos2unix \
     curl \
     git \
+    binutils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install pyserial
@@ -39,7 +40,6 @@ RUN wget -q -O boost_${BOOST_VERSION_UNDERSCORE}.tar.gz \
 WORKDIR /app
 COPY . .
 
-RUN git submodule update --init --recursive
 
 # Fix permissions and formats
 RUN chmod 666 /app/config.json && \
@@ -49,8 +49,7 @@ RUN chmod 666 /app/config.json && \
 # Build the C++ project
 RUN mkdir build 
 WORKDIR /app/build
-RUN cmake .. || (cat CMakeFiles/CMakeError.log && false)
-RUN make -j$(nproc)
+RUN cmake .. && make -j$(nproc)
 
 WORKDIR /app
 # Copy and set up entrypoint
@@ -58,5 +57,7 @@ COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080 9002
+
+RUN strip /app/Main
 
 ENTRYPOINT ["/app/entrypoint.sh"]
