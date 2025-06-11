@@ -5,6 +5,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
+    g++ \
+    gcc \
     python3 \
     python3-pip \
     socat \
@@ -43,7 +45,8 @@ RUN chmod 666 /app/config.json && \
 # Build the C++ project
 RUN mkdir build 
 WORKDIR /app/build
-RUN cmake .. && make -j$(nproc)
+RUN cmake .. || (cat CMakeFiles/CMakeError.log && false)
+RUN make -j$(nproc)
 
 WORKDIR /app
 # Copy and set up entrypoint
