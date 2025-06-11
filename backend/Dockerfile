@@ -18,11 +18,18 @@ RUN pip3 install pyserial
 
 WORKDIR /app
 
-# Copy and install Boost (cached layer)
-COPY tmp/boost_1_83_0/ /app/tmp/boost_1_83_0
-WORKDIR /app/tmp/boost_1_83_0
-RUN ./bootstrap.sh --with-libraries=system,filesystem,thread,regex && \
-    ./b2 install -j$(nproc)
+ENV BOOST_VERSION=1.83.0
+ENV BOOST_VERSION_UNDERSCORE=1_83_0
+
+WORKDIR /app/tmp
+
+RUN wget -q -O boost_${BOOST_VERSION_UNDERSCORE}.tar.gz \
+    https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION_UNDERSCORE}.tar.gz/download && \
+    tar xzf boost_${BOOST_VERSION_UNDERSCORE}.tar.gz && \
+    cd boost_${BOOST_VERSION_UNDERSCORE} && \
+    ./bootstrap.sh --with-libraries=system,filesystem,thread,regex && \
+    ./b2 install -j$(nproc) && \
+    cd .. && rm -rf boost_${BOOST_VERSION_UNDERSCORE} boost_${BOOST_VERSION_UNDERSCORE}.tar.gz
 
 # Copy full project
 WORKDIR /app
