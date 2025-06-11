@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tar \
     dos2unix \
     curl \
+    git \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install pyserial
@@ -33,9 +34,12 @@ RUN wget -q -O boost_${BOOST_VERSION_UNDERSCORE}.tar.gz \
     ./b2 install -j$(nproc) && \
     cd .. && rm -rf boost_${BOOST_VERSION_UNDERSCORE} boost_${BOOST_VERSION_UNDERSCORE}.tar.gz
 
+
 # Copy full project
 WORKDIR /app
 COPY . .
+
+RUN git submodule update --init --recursive
 
 # Fix permissions and formats
 RUN chmod 666 /app/config.json && \
