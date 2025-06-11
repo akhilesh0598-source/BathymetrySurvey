@@ -11,7 +11,7 @@ void signalHandler(int signum) {
 int main() {
     std::signal(SIGINT, signalHandler);
     
-    JsonReader reader("config.json");
+    JsonReader reader("./config.json");
     reader.setConfig();
 
     boost::asio::io_context ioc;
