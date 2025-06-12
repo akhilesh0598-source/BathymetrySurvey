@@ -11,7 +11,7 @@ function getClientId() {
 }
 
 // For GET requests (e.g., startLogging, stopLogging)
-export const getFromUrl = async (urlPath) => {
+export const getWithClientId = async (urlPath) => {
   const clientId = getClientId();
   try {
     const response = await fetch(`${config.apiUrl}${urlPath}?clientId=${clientId}`);
@@ -24,13 +24,31 @@ export const getFromUrl = async (urlPath) => {
   }
 };
 
+export const getWithUrl = async (urlPath) => {
+  const fullUrl = `${config.apiUrl}${urlPath}`;
+  try {
+    const response = await fetch(fullUrl);
+    if (!response.ok) throw new Error(`GET failed: ${response.statusText}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`GET ${urlPath} failed:`, error);
+    throw error;
+  }
+};
+
+
 // For downloading the latest log file
 export const downloadFile = async (urlPath, fileName = 'downloaded_file.csv') => {
   const clientId = getClientId();
   try {
     const response = await fetch(`${config.apiUrl}${urlPath}?clientId=${clientId}`);
     if (!response.ok) {
-      throw new Error(`Download failed with status ${response.status}`);
+      if (response.status === 404) {
+        throw new Error('You do not have file, you should log file using button Start Logging');
+      } else {
+        throw new Error(`API error: ${response.status}`);
+      }
     }
 
     const blob = await response.blob();

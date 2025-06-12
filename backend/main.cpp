@@ -27,8 +27,8 @@ int main() {
 
     boost::asio::io_context ioc;
     global_ioc = &ioc; 
-    WebSocketServer wsServer(ioc,config.WebSocketPort);
-    wsServer.start();
+    //WebSocketServer wsServer(ioc,config.WebSocketPort);
+    //wsServer.start();
 
     HttpServer httpServer(ioc, config.HttpServerPort);
     httpServer.start();
@@ -47,7 +47,7 @@ int main() {
     // Clean shutdown
     sonar.Stop();
     gps.Stop();
-    wsServer.stop();
+    //wsServer.stop();
     httpServer.stop();
 
     if (ioc_thread.joinable()) {

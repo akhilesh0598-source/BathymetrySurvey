@@ -1,62 +1,57 @@
 import time
-import math
+from functools import reduce
+from datetime import datetime, timezone
 
-# Path to the mock serial device
-gps_device_path = "/tmp/ttyWriteGPS"
+GPS_DEVICE_PATH = "/tmp/ttyWriteGPS"  # Update this to your virtual port
+START_LAT = 23.2599
+START_LON = 77.4126
+LAT_STEP = 0.0001
+LON_STEP = 0.0001
+UPDATE_INTERVAL = 1  # seconds
 
-# Starting GPS coordinate (example: somewhere in Bangalore)
-start_lat = 12.9716  # degrees
-start_lon = 77.5946  # degrees
-
-# Speed of movement in degrees per update
-lat_step = 0.0001
-lon_step = 0.0001
-
-def decimal_to_nmea(coord, is_latitude):
-    degrees = int(coord)
-    minutes = (coord - degrees) * 60
-    if is_latitude:
+def decimal_to_nmea(coord, is_lat):
+    degrees = int(abs(coord))
+    minutes = (abs(coord) - degrees) * 60
+    if is_lat:
         direction = 'N' if coord >= 0 else 'S'
-        return f"{abs(degrees):02d}{abs(minutes):07.4f}", direction
+        fmt_str = f"{degrees:02d}{minutes:07.4f}"
     else:
         direction = 'E' if coord >= 0 else 'W'
-        return f"{abs(degrees):03d}{abs(minutes):07.4f}", direction
+        fmt_str = f"{degrees:03d}{minutes:07.4f}"
+    return fmt_str, direction
 
-def generate_gpgga_sentence(lat, lon):
-    lat_str, lat_dir = decimal_to_nmea(lat, is_latitude=True)
-    lon_str, lon_dir = decimal_to_nmea(lon, is_latitude=False)
+def calculate_checksum(nmea_sentence_data):
+    checksum = reduce(lambda a, b: a ^ ord(b), nmea_sentence_data, 0)
+    return f"{checksum:02X}"
 
-    # Static fields: UTC time, fix quality, satellites, etc.
-    base = f"GPGGA,123519,{lat_str},{lat_dir},{lon_str},{lon_dir},1,08,0.9,545.4,M,46.9,M,,"
-    checksum = calculate_checksum(base)
-    return f"${base}*{checksum}"
-
-def calculate_checksum(nmea_str):
-    """Calculate NMEA checksum (XOR of all characters between $ and *)"""
-    cksum = 0
-    for c in nmea_str:
-        cksum ^= ord(c)
-    return f"{cksum:02X}"
+def generate_gpgga(lat, lon):
+    utc_time = datetime.now(timezone.utc).strftime("%H%M%S.000")
+    lat_str, lat_dir = decimal_to_nmea(lat, True)
+    lon_str, lon_dir = decimal_to_nmea(lon, False)
+    base_sentence = f"GPGGA,{utc_time},{lat_str},{lat_dir},{lon_str},{lon_dir},1,08,0.9,100.0,M,0.0,M,,"
+    return f"${base_sentence}*{calculate_checksum(base_sentence)}"
 
 def main():
-    #print(f"Sending simulated GPS data to {gps_device_path}")
+    lat, lon = START_LAT, START_LON
 
-    lat = start_lat
-    lon = start_lon
+    try:
+        with open(GPS_DEVICE_PATH, "w") as f:
+            while True:
+                nmea = generate_gpgga(lat, lon)
+                #print(f"Sending: {nmea}")
+                f.write(nmea + "\r\n")
+                f.flush()
 
-    while True:
-        sentence = generate_gpgga_sentence(lat, lon)
-        try:
-            with open(gps_device_path, "w") as f:
-                f.write(sentence + "\r\n")
-            # print("Sent:", sentence)
-        except IOError as e:
-            print(f"Error writing to {gps_device_path}: {e}")
+                # Increment position
+                lat += LAT_STEP
+                lon += LON_STEP
 
-        # Move slightly
-        lat += lat_step
-        lon += lon_step
-        time.sleep(1)
+                time.sleep(UPDATE_INTERVAL)
+
+    except FileNotFoundError:
+        print(f"Error: Device path '{GPS_DEVICE_PATH}' not found. Create it using socat.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()

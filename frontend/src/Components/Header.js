@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaDownload, FaPlay, FaStop, FaBars } from 'react-icons/fa';
-import { getFromUrl, downloadFile } from '../api/FetchData';
+import { getFromUrl, downloadFile, getWithClientId } from '../api/FetchData';
 import { toast } from 'react-toastify';
 
 import { Link } from 'react-router-dom';
@@ -22,7 +22,7 @@ const Header = () => {
 
     if (!isLogging) {
       try {
-        await getFromUrl('/startLogging');
+        await getWithClientId('/startLogging');
         setIsLogging(true);
         toast.success("Logging started!");
       } catch (error) {
@@ -31,7 +31,7 @@ const Header = () => {
       }
     } else {
       try {
-        await getFromUrl('/stopLogging');
+        await getWithClientId('/stopLogging');
         setIsLogging(false);
         toast.success("Logging stopped!");
       } catch (error) {
@@ -54,7 +54,7 @@ const Header = () => {
       toast.success("Download started successfully");
     } catch (error) {
       console.error('Download failed:', error);
-      toast.error("Failed to start download");
+      toast.error(error.message);
     } finally {
       setDownloadLoading(false);
     }
